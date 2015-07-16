@@ -1,0 +1,9 @@
+<section ng-controller="DrawingController as vm">
+    <div pw-canvas options="{undo: true, width: 400, height: 300, color: '#000', backgroundColor: 'transparent'}" version="vm.oVersion"></div>
+
+    <div class="kanji-answer">水</div>
+
+    <button class="button button-full button-energized"
+            ng-click="vm.clearDrawingBoard()">Clear</button>
+
+</section>
