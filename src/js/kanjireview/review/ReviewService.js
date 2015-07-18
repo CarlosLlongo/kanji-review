@@ -13,16 +13,21 @@
         var nCurrentKanjiId = 1;
         var nLearnedKanji = 50;
         var nReviewedKanji = 0;
+        var nCorrectWritings = 0;
+        var nWrongWritings = 0;
 
 
         var oService = {
             nLearnedKanji: nLearnedKanji,
             aKanjiData: aKanjiData,
 
+            endReview: endReview,
+            getCorrectCount: getCorrectCount,
             getCurrentKanji: getCurrentKanji,
             getCurrentKanjiId: getCurrentKanjiId,
             getCurrentKanjiKeyword: getCurrentKanjiKeyword,
             getReviewedKanji: getReviewedKanji,
+            getWrongCount: getWrongCount,
             init: init,
             startReview: startReview,
             successfulWriting: successfulWriting,
@@ -32,6 +37,14 @@
         return oService;
 
         // PUBLIC //////////////////////////////////////////////////////////////
+
+        function endReview(){
+            $state.go('app.results');
+        }
+
+        function getCorrectCount(){
+            return nCorrectWritings;
+        }
 
         function getCurrentKanji(){
             if(oService.aKanjiData){
@@ -57,6 +70,10 @@
             return nReviewedKanji;
         }
 
+        function getWrongCount(){
+            return nWrongWritings;
+        }
+
         function init(){
             return $http.get(
                 'data/kanji-data.json')
@@ -64,36 +81,40 @@
 
             function initComplete(aKanjiData){
                 oService.aKanjiData = aKanjiData.data;
-
-                nCurrentKanjiId = Math.floor(Math.random() * (oService.nLearnedKanji)) + 1;
             }
         }
 
         function startReview(nLearnedKanji){
             oService.nLearnedKanji = nLearnedKanji;
 
-            console.log(nLearnedKanji);
+            nReviewedKanji = 0;
+            nCorrectWritings = 0;
+            nWrongWritings = 0;
+            nCurrentKanjiId = Math.floor(Math.random() * (oService.nLearnedKanji)) + 1;
 
-            $state.go('drawing');
+            $state.go('app.drawing');
         }
 
         function successfulWriting(){
-            var nNextKanjiId = Math.floor(Math.random() * (oService.nLearnedKanji)) + 1;
+            nCorrectWritings++;
 
-            nCurrentKanjiId = nNextKanjiId;
-
-            nReviewedKanji++;
+            goToNextKanji();
         }
 
         function wrongWriting(){
-            var nNextKanjiId = Math.floor(Math.random() * (oService.nLearnedKanji)) + 1;
+            nWrongWritings++;
 
-            nCurrentKanjiId = nNextKanjiId;
-
-            nReviewedKanji++;
+            goToNextKanji();
         }
 
         // PRIVATE /////////////////////////////////////////////////////////////
 
+        function goToNextKanji(){
+            var nNextKanjiId = Math.floor(Math.random() * (oService.nLearnedKanji)) + 1;
+
+            nCurrentKanjiId = nNextKanjiId;
+
+            nReviewedKanji++;
+        }
     }
 })();

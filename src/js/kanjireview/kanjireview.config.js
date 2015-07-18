@@ -9,22 +9,49 @@
 
     function configure($stateProvider, $urlRouterProvider){
 
+        var oApp = /*@ngInject*/ {
+            name: 'app',
+            url: '/app',
+            abstract: true,
+            templateUrl: 'html/menu/templates/side-menu-template.html'
+        };
+
         var oStart = /*@ngInject*/ {
-            name: 'start',
+            name: 'app.start',
             url: '/start',
-            templateUrl: 'html/start/templates/start-template.html'
+            views: {
+                'menuContent': {
+                    templateUrl: 'html/start/templates/start-template.html'
+                }
+            }
         };
 
         var oDrawing = /*@ngInject*/ {
-            name: 'drawing',
+            name: 'app.drawing',
             url: '/drawing',
-            templateUrl: 'html/drawing/templates/drawing-template.html'
+            views: {
+                'menuContent': {
+                    templateUrl: 'html/drawing/templates/drawing-template.html'
+                }
+            }
+        };
+
+        var oResults = /*@ngInject*/ {
+            name: 'app.results',
+            url: '/results',
+            views: {
+                'menuContent': {
+                    templateUrl: 'html/results/templates/results-template.html'
+                }
+            }
         };
 
         $stateProvider
+            .state(oApp)
             .state(oStart)
-            .state(oDrawing);
+            .state(oDrawing)
+            .state(oResults);
 
-        $urlRouterProvider.otherwise('/start');
+        $urlRouterProvider.otherwise('/app/start');
     }
 })();
