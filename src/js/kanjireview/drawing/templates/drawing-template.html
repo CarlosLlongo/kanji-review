@@ -1,0 +1,37 @@
+<ion-view view-title="Review" ng-controller="DrawingController as vm">
+    <ion-content>
+        <ion-header-bar class="bar-light">
+            <div class="row">
+                <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+                <div class="col text-center" style="text-transform: capitalize">
+                    <p>{{vm.getCurrentKanjiKeyword()}}</p>
+                </div>
+                <div class="col text-right">
+                    <p>Id: {{vm.getCurrentKanjiId()}}</p>
+                </div>
+            </div>
+        </ion-header-bar>
+
+        <div pw-canvas options="{undo: true, width: 400, height: 300, color: '#000', backgroundColor: 'transparent'}" version="vm.oVersion"></div>
+
+        <div class="kanji-answer"
+             ng-show="vm.isCheckingState()">{{vm.getCurrentKanji()}}</div>
+
+        <div class="row" ng-hide="vm.isCheckingState()">
+            <button class="button button-block button-balanced"
+                    ng-click="vm.checkKanji()">Check</button>
+        </div>
+        <div class="row" ng-show="vm.isCheckingState()">
+            <button class="button button-block button-assertive icon ion-close-round"
+                    ng-click="vm.wrongWriting()"></button>
+            <button class="button button-block button-balanced icon ion-checkmark-round"
+                    ng-click="vm.successfulWriting()"></button>
+        </div>
+
+        <ion-footer-bar class="bar-light">
+            <button class="button button-energized"
+                    ng-click="vm.clearDrawingBoard()">Clear</button>
+            <p class="col text-right">Reviewed: {{vm.getReviewedKanji()}}</p>
+        </ion-footer-bar>
+    </ion-content>
+</ion-view>
