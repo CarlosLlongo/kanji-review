@@ -5,14 +5,14 @@
         .module('kanjireview')
         .config(configure);
 
-    configure.$inject = ['$stateProvider'];
+    configure.$inject = ['$stateProvider', '$urlRouterProvider'];
 
-    function configure($stateProvider){
+    function configure($stateProvider, $urlRouterProvider){
 
         var oStart = /*@ngInject*/ {
-            name: 'home',
-            url: '/home',
-            templateUrl: 'html/jander/templates/jander-template.html'
+            name: 'start',
+            url: '/start',
+            templateUrl: 'html/start/templates/start-template.html'
         };
 
         var oDrawing = /*@ngInject*/ {
@@ -24,5 +24,7 @@
         $stateProvider
             .state(oStart)
             .state(oDrawing);
+
+        $urlRouterProvider.otherwise('/start');
     }
 })();
