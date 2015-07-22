@@ -15,4 +15,5 @@
     angular.module('kanjireview.menu', []);
     angular.module('kanjireview.review', []);
     angular.module('kanjireview.start', []);
+
 })();
