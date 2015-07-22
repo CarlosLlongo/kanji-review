@@ -9,12 +9,14 @@ var sh = require('shelljs');
 var uglify = require('gulp-uglify');
 var ngAnnotate = require('gulp-ng-annotate');
 var del = require('del');
+var Server = require('karma').Server;
 
 var paths = {
     sass: ['./scss/**/*.scss'],
     mySass: ['./src/sass/**/*.scss'],
     js: ['./src/js/**/*.js'],
-    html: ['./src/js/kanjireview/**/*.html']
+    testing: ['./www/js/app.js', './src/spec/**/*.js'],
+    html: ['./src/js/angularjs/kanjireview/**/*.html']
 };
 
 gulp.task('default', ['sass']);
@@ -50,10 +52,10 @@ gulp.task('my-sass', function(done){
 });
 
 gulp.task('js', function(done){
-    gulp.src(['./src/js/KanjiReview.js', './src/js/**/*.js'])
+    gulp.src(['./src/js/angularjs/KanjiReview.js', './src/js/**/*.js'])
         .pipe(concat('app.js'))
         .pipe(ngAnnotate())
-        .pipe(uglify())
+        //.pipe(uglify())
         .pipe(gulp.dest('./www/js/'))
         .on('end', done);
 });
@@ -65,9 +67,17 @@ gulp.task('html', function(done){
         .on('end', done);
 });
 
+gulp.task('test', function(done){
+    new Server({
+        configFile: __dirname + '/karma.conf.js',
+        singleRun: true
+    }, done).start();
+});
+
 gulp.task('watch', function() {
     gulp.watch(paths.mySass, ['my-sass']);
     gulp.watch(paths.js, ['js']);
+    gulp.watch(paths.testing, ['test']);
     gulp.watch(paths.html, ['html']);
 });
 
