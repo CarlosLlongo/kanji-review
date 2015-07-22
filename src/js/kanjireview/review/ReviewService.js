@@ -10,9 +10,10 @@
     function ReviewService($http, $state){
 
         var aKanjiData;
-        var nCurrentKanjiId = 1;
+        var aReviewArray;
         var nLearnedKanji = 50;
         var nReviewedKanji = 0;
+        var nReviewArrayIndex = 0;
         var nCorrectWritings = 0;
         var nWrongWritings = 0;
 
@@ -48,19 +49,19 @@
 
         function getCurrentKanji(){
             if(oService.aKanjiData){
-                return oService.aKanjiData[String(nCurrentKanjiId)].kanji;
+                return oService.aKanjiData[aReviewArray[nReviewArrayIndex]].kanji;
             }
 
             return '';
         }
 
         function getCurrentKanjiId(){
-            return nCurrentKanjiId;
+            return aReviewArray[nReviewArrayIndex];
         }
 
         function getCurrentKanjiKeyword(){
             if(oService.aKanjiData){
-                return oService.aKanjiData[String(nCurrentKanjiId)].keyword;
+                return oService.aKanjiData[aReviewArray[nReviewArrayIndex]].keyword;
             }
 
             return '';
@@ -87,10 +88,12 @@
         function startReview(nLearnedKanji){
             oService.nLearnedKanji = nLearnedKanji;
 
+            aReviewArray = createReviewArray();
+
+            nReviewArrayIndex = 0;
             nReviewedKanji = 0;
             nCorrectWritings = 0;
             nWrongWritings = 0;
-            nCurrentKanjiId = Math.floor(Math.random() * (oService.nLearnedKanji)) + 1;
 
             $state.go('app.drawing');
         }
@@ -110,11 +113,43 @@
         // PRIVATE /////////////////////////////////////////////////////////////
 
         function goToNextKanji(){
-            var nNextKanjiId = Math.floor(Math.random() * (oService.nLearnedKanji)) + 1;
-
-            nCurrentKanjiId = nNextKanjiId;
-
             nReviewedKanji++;
+
+            nReviewArrayIndex++;
+
+            if(nReviewArrayIndex >= aReviewArray.length){
+                nReviewArrayIndex = 0;
+                shuffle(aReviewArray);
+            }
+        }
+
+        function createReviewArray(){
+            var aReviewArray = [];
+
+            for(var i = 1; i <= oService.nLearnedKanji; i++){
+                aReviewArray.push(String(i));
+            }
+
+            console.log(aReviewArray);
+
+            shuffle(aReviewArray);
+
+            console.log(aReviewArray);
+
+            return aReviewArray;
+        }
+
+        function shuffle(aOriginal){
+            var n;
+            var aux;
+
+            for(var i = aOriginal.length - 1; i > 0; i--){
+                n = Math.floor(Math.random() * aOriginal.length);
+
+                aux = aOriginal[i];
+                aOriginal[i] = aOriginal[n];
+                aOriginal[n] = aux;
+            }
         }
     }
 })();
