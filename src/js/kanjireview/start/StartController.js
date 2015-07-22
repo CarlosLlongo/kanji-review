@@ -30,7 +30,6 @@
         function initServices(){
             ReviewService.init();
         }
-
     }
 
 })();
