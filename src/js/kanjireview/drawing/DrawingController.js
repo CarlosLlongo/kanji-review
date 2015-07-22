@@ -24,8 +24,6 @@
         vm.successfulWriting = successfulWriting;
         vm.wrongWriting = wrongWriting;
 
-        ReviewService.init();
-
         // PUBLIC //////////////////////////////////////////////////////////////
 
         function checkKanji(){
