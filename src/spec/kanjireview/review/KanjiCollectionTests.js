@@ -41,6 +41,21 @@ describe('KanjiCollection', function(){
         oKanjiCollection.putKanji(new Kanji('5', '水', 'water'));
 
         expect(oKanjiCollection.getSize()).toEqual(1);
+
+        oKanjiCollection.putKanji(new Kanji('7', '雷', 'thunder'));
+
+        expect(oKanjiCollection.getSize()).toEqual(2);
+    });
+
+    it("can get the keyset of the collection", function () {
+        var oKanjiCollection = new KanjiCollection();
+
+        oKanjiCollection.putKanji(new Kanji('12', '雨', 'rain'));
+        oKanjiCollection.putKanji(new Kanji('7', '雷', 'thunder'));
+        oKanjiCollection.putKanji(new Kanji('18', '雪', 'snow'));
+        oKanjiCollection.putKanji(new Kanji('5', '水', 'water'));
+
+        expect(oKanjiCollection.getKeyset()).toEqual(['5', '7', '12', '18']);
     });
 
 });
