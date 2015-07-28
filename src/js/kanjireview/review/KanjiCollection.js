@@ -8,6 +8,7 @@ function KanjiCollection(){
 
     oKanjiCollection.putKanji = putKanji;
     oKanjiCollection.getKanji = getKanji;
+    oKanjiCollection.getKeyset = getKeyset;
     oKanjiCollection.getSize = getSize;
 
     // PUBLIC ///////////////////////////////////////////////////////////////////////
@@ -24,4 +25,13 @@ function KanjiCollection(){
         return Object.keys(oKanjiCollection.oStorage).length;
     }
 
+    function getKeyset(){
+        var oKeyset = Object.keys(oKanjiCollection.oStorage);
+        oKeyset.sort(function(a, b){
+            if(parseInt(a) > parseInt(b)) return 1;
+            else return -1;
+        });
+
+        return oKeyset;
+    }
 }
