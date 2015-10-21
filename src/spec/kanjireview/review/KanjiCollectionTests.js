@@ -58,4 +58,32 @@ describe('KanjiCollection', function(){
         expect(oKanjiCollection.getKeyset()).toEqual(['5', '7', '12', '18']);
     });
 
+    it("can populate from json object", function () {
+        var oKanjiCollection = new KanjiCollection();
+
+        var oJsonObject = {
+            '1':{
+                'kanji': '雨',
+                'keyword': 'rain'
+            }
+        };
+
+        oKanjiCollection.populateFromJsonObject(oJsonObject);
+        expect(oKanjiCollection.getKeyset()).toEqual(['1']);
+
+        oJsonObject = {
+            '1':{
+                'kanji': '雨',
+                'keyword': 'rain'
+            },
+            '2':{
+                'kanji': '雷',
+                'keyword': 'thunder'
+            }
+        };
+
+        oKanjiCollection.populateFromJsonObject(oJsonObject);
+        expect(oKanjiCollection.getKeyset()).toEqual(['1', '2']);
+    });
+
 });
