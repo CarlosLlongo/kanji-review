@@ -3,7 +3,7 @@
  * current cycle. When the current cycle is finished, it is refilled with the kanji in the store.
  * @constructor
  */
-function KanjiDifficultyStorage(){
+function KanjiDifficultyStorage(oOptions){
 
     var oKanjiDifficultyStorage = this;
 
@@ -27,6 +27,8 @@ function KanjiDifficultyStorage(){
     oKanjiDifficultyStorage.getCurrentCycle = getCurrentCycle;
     oKanjiDifficultyStorage.setStorage = setStorage;
     oKanjiDifficultyStorage.getStorage = getStorage;
+
+    initOptions(oOptions);
 
     /**
      * Adds a kanji ID to the storage.
@@ -120,4 +122,20 @@ function KanjiDifficultyStorage(){
         return oKanjiDifficultyStorage.aStorage;
     }
 
+    /**
+     * Gets the elements in the Option object and sets the storage and current cycle.
+     *
+     * @param oOptions The object containing the storage and cycle data.
+     */
+    function initOptions(oOptions){
+        if(oOptions instanceof Object){
+            if(oOptions.storage){
+                setStorage(oOptions.storage);
+            }
+
+            if(oOptions.cycle){
+                setCurrentCycle(oOptions.cycle);
+            }
+        }
+    }
 }
