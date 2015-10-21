@@ -4,6 +4,16 @@ describe('KanjiDifficultyStorage', function() {
         expect(new KanjiDifficultyStorage()).toBeDefined();
     });
 
+    it("can init storage and cycle by parameters", function () {
+        var oKanjiDifficultyStorage = new KanjiDifficultyStorage({
+            storage: [2],
+            cycle: [3]
+        });
+
+        expect(oKanjiDifficultyStorage.getStorage()).toEqual([2]);
+        expect(oKanjiDifficultyStorage.getCurrentCycle()).toEqual([3]);
+    });
+
     it("can add to the storage", function () {
         var oKanjiDifficultyStorage = new KanjiDifficultyStorage();
 
@@ -85,8 +95,6 @@ describe('KanjiDifficultyStorage', function() {
 
         expect(aCycleIds.length).toBe(5);
         expect(oKanjiDifficultyStorage.getCurrentCycle().length).toBe(4);
-
-        //expect(containSameElements(aCycleIds, [1,2,3,4,5,6]));
     });
 
 });
