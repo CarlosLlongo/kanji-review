@@ -41,6 +41,7 @@ function ReviewEngine(oOptions){
     oReviewEngine.getNextKanji = getNextKanji;
 
     initOptions(oOptions);
+    populateBatch();
 
     /**
      * Returns the number of learned Kanji
@@ -96,8 +97,6 @@ function ReviewEngine(oOptions){
                 oReviewEngine.oKanjiCollection = oOptions.kanjiCollection;
             }
         }
-
-        populateBatch();
     }
 
     /**
@@ -117,6 +116,4 @@ function ReviewEngine(oOptions){
         oReviewEngine.aBatch = oReviewEngine.oReviewBatch.getBatch();
         oReviewEngine.nCursor = 0;
     }
-
-
 }
