@@ -62,7 +62,7 @@ gulp.task('js', function(done){
 
 gulp.task('html', function(done){
     //del(['./www/html/**/*']);
-    gulp.src('./src/js/kanjireview/**/*.html')
+    gulp.src('./src/js/angularjs/kanjireview/**/*.html')
         .pipe(gulp.dest('./www/html/'))
         .on('end', done);
 });
