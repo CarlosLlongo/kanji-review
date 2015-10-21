@@ -5,9 +5,11 @@
         .module('kanjireview')
         .config(configure);
 
-    configure.$inject = ['$stateProvider', '$urlRouterProvider'];
+    configure.$inject = ['$stateProvider', '$urlRouterProvider', '$ionicConfigProvider'];
 
-    function configure($stateProvider, $urlRouterProvider){
+    function configure($stateProvider, $urlRouterProvider, $ionicConfigProvider){
+
+        $ionicConfigProvider.views.maxCache(0);
 
         var oApp = /*@ngInject*/ {
             name: 'app',
