@@ -241,5 +241,27 @@ describe('ReviewBatch', function(){
         expect(nEasyDifficultyKanji).toBe(40);
     });
 
+    it("can re-populate the batch", function () {
+        var oHardStorage = mockObject(new KanjiDifficultyStorage());
+        var oMediumStorage = mockObject(new KanjiDifficultyStorage());
+        var oEasyStorage = mockObject(new KanjiDifficultyStorage());
+        createStub(oHardStorage, 'getFromCycle', []);
+        createStub(oMediumStorage, 'getFromCycle', []);
+        createStub(oEasyStorage, 'getFromCycle', []);
 
+        var oKanjiDifficultyManager = new KanjiDifficultyManager({
+            hardStorage: oHardStorage,
+            mediumStorage: oMediumStorage,
+            easyStorage: oEasyStorage
+        });
+
+        var oReviewBatch = new ReviewBatch(10, 10, {kanjiDifficultyManager: oKanjiDifficultyManager});
+        oReviewBatch.populate();
+        var aBatch = oReviewBatch.getBatch().slice();
+
+        oReviewBatch.populate();
+        var aAnotherBatch = oReviewBatch.getBatch().slice();
+
+        expect(aAnotherBatch.length).toEqual(aBatch.length);
+    });
 });
