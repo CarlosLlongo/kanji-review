@@ -64,6 +64,7 @@ function ReviewBatch(nLearnedKanji, nNewLearnedKanji, oOptions){
      * reached or there are no more kanjis left.
      */
     function populate(){
+        oReviewBatch.aStorage = [];
 
         if(nNewLearnedKanji <= nMaxReviewBatchSize){
             for(var i = oReviewBatch.nLearnedKanji; i > nLearnedKanji - nNewLearnedKanji; i--){
@@ -90,6 +91,8 @@ function ReviewBatch(nLearnedKanji, nNewLearnedKanji, oOptions){
             oReviewBatch.aStorage = oReviewBatch.aStorage.concat(
                 oReviewBatch.oKanjiDifficultyManager.getFromEasyCycle(remaining()));
         }
+
+        oReviewBatch.aStorage = shuffle(oReviewBatch.aStorage);
     }
 
     /**
