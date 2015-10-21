@@ -17,6 +17,7 @@ function KanjiCollection(){
     oKanjiCollection.getKanji = getKanji;
     oKanjiCollection.getKeyset = getKeyset;
     oKanjiCollection.getSize = getSize;
+    oKanjiCollection.populateFromJsonObject = populateFromJsonObject;
 
     // PUBLIC ///////////////////////////////////////////////////////////////////////
 
@@ -57,5 +58,15 @@ function KanjiCollection(){
         });
 
         return oKeyset;
+    }
+
+    /**
+     * Adds all Kanji described in the JSON object.
+     * @param oJsonObject An object with JSON structure that contains kanji information.
+     */
+    function populateFromJsonObject(oJsonObject){
+        for(var sKey in oJsonObject){
+            putKanji(new Kanji(sKey, oJsonObject[sKey].kanji, oJsonObject[sKey].keyword));
+        }
     }
 }
