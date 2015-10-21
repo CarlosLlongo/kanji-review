@@ -8,6 +8,7 @@
                 </label>
             </div>
             <button class="button button-block button-positive"
+                    ng-disabled="!vm.bReadyToStart"
                     ng-click="vm.startReview()">
                 Start
             </button>
