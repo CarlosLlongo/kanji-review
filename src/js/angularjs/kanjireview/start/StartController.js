@@ -5,32 +5,56 @@
         .module('kanjireview.start')
         .controller('StartController', StartController);
 
-    StartController.$inject = ['ReviewService'];
+    StartController.$inject = ['$scope', 'ReviewService', 'ReviewDataService', 'KanjiDataService', '$rootScope'];
 
-    function StartController(ReviewService){
+    function StartController($scope, ReviewService, ReviewDataService, KanjiDataService, $rootScope){
 
         var vm = this;
 
         vm.nLearnedKanji = 0;
+        vm.nWaitingForServices = 2;
+        vm.bReadyToStart = false;
 
+        vm.getLearnedKanji = getLearnedKanji;
         vm.startReview = startReview;
 
-        initServices();
+        $scope.$on('ReviewDataService_init_end', function(){
+            vm.nLearnedKanji = ReviewDataService.getLearnedKanji();
+            vm.nWaitingForServices--;
+
+            checkIfReady();
+        });
+
+        $scope.$on('KanjiDataService_init_end', function(){
+            vm.nWaitingForServices--;
+
+            checkIfReady();
+        });
+
+        initDataServices();
 
         // PUBLIC //////////////////////////////////////////////////////////////
 
-        function startReview(){
-            console.log(vm.nLearnedKanji);
+        function getLearnedKanji(){
+            return vm.nLearnedKanji;
+        }
 
+        function startReview(){
             ReviewService.startReview(vm.nLearnedKanji);
         }
 
         // PRIVATE /////////////////////////////////////////////////////////////
 
-        function initServices(){
-            ReviewService.init();
+        function initDataServices(){
+            KanjiDataService.init();
+            ReviewDataService.init();
         }
 
+        function checkIfReady(){
+            if(vm.nWaitingForServices === 0){
+                vm.bReadyToStart = true;
+            }
+        }
     }
 
 })();
