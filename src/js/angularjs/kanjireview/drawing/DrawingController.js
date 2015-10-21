@@ -24,38 +24,65 @@
         vm.successfulWriting = successfulWriting;
         vm.wrongWriting = wrongWriting;
 
-        ReviewService.init();
-
         // PUBLIC //////////////////////////////////////////////////////////////
 
+        /**
+         * Changes the view to the 'checking' state where the written kanji con be compared.
+         */
         function checkKanji(){
             vm.sState = 'checking';
         }
 
+        /**
+         * Clears all lines drawn in the drawing board.
+         */
         function clearDrawingBoard(){
             vm.oVersion = 0;
         }
 
+        /**
+         * Obtains the current kanji character.
+         * @returns {String} The current kanji character.
+         */
         function getCurrentKanji(){
             return ReviewService.getCurrentKanji();
         }
 
+        /**
+         * Obtains the current kanji ID.
+         * @returns {String} The current kanji ID.
+         */
         function getCurrentKanjiId(){
             return ReviewService.getCurrentKanjiId();
         }
 
+        /**
+         * Obtains the current kanji keyword.
+         * @returns {String} The current kanji keyword.
+         */
         function getCurrentKanjiKeyword(){
             return ReviewService.getCurrentKanjiKeyword();
         }
 
+        /**
+         * Obtains the count of the kanjins reviewed in this review.
+         * @returns {Integer} The number of kanjis reviewed.
+         */
         function getReviewedKanji(){
             return ReviewService.getReviewedKanji();
         }
 
+        /**
+         * Checks if the current state is the 'checking' state.
+         * @returns {boolean} True if we are in the 'checking' state, false otherwise.
+         */
         function isCheckingState(){
             return vm.sState === 'checking';
         }
 
+        /**
+         * Notifies the ReviewService that the kanji was written successfully.
+         */
         function successfulWriting(){
             ReviewService.successfulWriting();
 
@@ -64,6 +91,9 @@
             vm.sState = 'writing';
         }
 
+        /**
+         * Notifies the ReviewService that the kanji was written incorrectly.
+         */
         function wrongWriting(){
             ReviewService.wrongWriting();
 
