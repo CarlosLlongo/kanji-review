@@ -39,35 +39,66 @@
         return oService;
 
         // PUBLIC //////////////////////////////////////////////////////////////
-        
+
+        /**
+         * Goes to the results screen.
+         */
         function endReview(){
             $state.go('app.results');
         }
 
+        /**
+         * Gets the number of Kanjis written correctly during the review.
+         * @returns {number}
+         */
         function getCorrectCount(){
             return nCorrectWritings;
         }
 
+        /**
+         * Gets the current Kanji character.
+         * @returns {String} The current kanji character.
+         */
         function getCurrentKanji(){
             return oService.oCurrentKanji.getCharacter();
         }
 
+        /**
+         * Gets the current Kanji ID.
+         * @returns {String} The current kanji ID.
+         */
         function getCurrentKanjiId(){
             return oService.oCurrentKanji.getId();
         }
 
+        /**
+         * Gets the current Kanji keyword.
+         * @returns {String} The current kanji keyword.
+         */
         function getCurrentKanjiKeyword(){
             return oService.oCurrentKanji.getKeyword();
         }
 
+        /**
+         * Gets the count of Kanjis reviewed in this review.
+         * @returns {number}
+         */
         function getReviewedKanji(){
             return nReviewedKanji;
         }
 
+        /**
+         * Gets the number of kanjis written incorrectly during the review.
+         * @returns {number}
+         */
         function getWrongCount(){
             return nWrongWritings;
         }
 
+        /**
+         * Initializes all objects needed for the review engine to work.
+         * @param nLearnedKanji The number of learned kanjis.
+         */
         function init(nLearnedKanji){
             var oReviewDataPersistence = new ReviewDataPersistence(ReviewDataService);
             var oReviewData = new ReviewData(oReviewDataPersistence);
@@ -101,6 +132,10 @@
             });
         }
 
+        /**
+         * Initializes the ReviewEngine, resets the counters, obtains the next kanji and goes to the drawing screen.
+         * @param nLearnedKanji The number of learned kanji.
+         */
         function startReview(nLearnedKanji){
             init(nLearnedKanji);
 
