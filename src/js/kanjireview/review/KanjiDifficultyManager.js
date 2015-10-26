@@ -17,6 +17,11 @@ function KanjiDifficultyManager(oOptions){
         medium: null,
         easy: null
     };
+    /**
+     * The collection of all kanji statistics.
+     * @type {KanjiStatisticsCollection}
+     */
+    oKanjiDifficultyManager.oKanjiStatisticsCollection = null;
 
     oKanjiDifficultyManager.initOptions = initOptions;
     oKanjiDifficultyManager.addHard = addHard;
@@ -37,6 +42,9 @@ function KanjiDifficultyManager(oOptions){
     oKanjiDifficultyManager.clearHardStorage = clearHardStorage;
     oKanjiDifficultyManager.clearMediumStorage = clearMediumStorage;
     oKanjiDifficultyManager.clearEasyStorage = clearEasyStorage;
+    oKanjiDifficultyManager.addResult = addResult;
+    oKanjiDifficultyManager.saveStatistics = saveStatistics;
+    oKanjiDifficultyManager.clearStatistics = clearStatistics;
 
     initOptions(oOptions);
 
@@ -185,6 +193,37 @@ function KanjiDifficultyManager(oOptions){
     }
 
     /**
+     * Adds a result to the kanji statistics. If the difficulty of the kanji has changed wit the new result, the
+     * storages will be updated.
+     * @param sKanjiId The Kanji ID to update.
+     * @param bResult The result in the review.
+     */
+    function addResult(sKanjiId, bResult){
+        var oStatus = oKanjiDifficultyManager.oKanjiStatisticsCollection.updateKanjiStatistics(sKanjiId, bResult);
+
+        if(oStatus.prevDifficulty !== oStatus.newDifficulty){
+            oKanjiDifficultyManager.oStorages[oStatus.prevDifficulty].removeFromStorage(sKanjiId);
+            oKanjiDifficultyManager.oStorages[oStatus.newDifficulty].store(sKanjiId);
+        }
+    }
+
+    /**
+     * Instructs the Kanji Statistics collection to save the Kanji Statistics.
+     */
+    function saveStatistics(){
+        oKanjiDifficultyManager.oKanjiStatisticsCollection.saveToLocalStorage();
+    }
+
+    /**
+     * Instructs the Kanji Statistics collection to clear the Kanji Statistics.
+     */
+    function clearStatistics(){
+        oKanjiDifficultyManager.oKanjiStatisticsCollection.clearStatistics();
+    }
+
+    // PRIVATE //
+
+    /**
      * Gets the elements in the Option object and assigns them to object properties so then can be used in the class
      * methods.
      * @param oOptions The object containing the class dependencies.
@@ -199,6 +238,9 @@ function KanjiDifficultyManager(oOptions){
             }
             if(oOptions.easyStorage){
                 oKanjiDifficultyManager.oStorages.easy = oOptions.easyStorage;
+            }
+            if(oOptions.kanjiStatisticsCollection){
+                oKanjiDifficultyManager.oKanjiStatisticsCollection = oOptions.kanjiStatisticsCollection;
             }
         }
     }
