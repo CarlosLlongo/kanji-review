@@ -1,25 +1,33 @@
 /**
- * This class will contain all the data that needs to be persisted. It will call to the persistency interface to init
- * all the data, and then the rest of the Class can query this class to obtain the needed data.
+ * This class will contain all the data that needs to be persisted. It will call to the persistence interface to init
+ * all the data, and then the rest of the classes can query this class to obtain the needed data.
  *
- * @param oReviewDataPersistence Interface for the persistence service.
+ * @param oOptions The dependencies for this class
  * @constructor
  */
-function ReviewData(oReviewDataPersistence){
+function ReviewData(oOptions){
 
     var oReviewData = this;
 
     /**
-     * The kanji IDs in the easy store.
-     * @type {Array} Array containing the kanji IDs in the easy store.
+     * Object containing all storages, cycles and learnedKanji.
+     * @type {{hardStorage: Array, mediumStorage: Array, easyStorage: Array, hardCycle: Array, mediumCycle: Array, easyCycle: Array, learnedKanji: number}}
      */
-    oReviewData.aEasyStore = [];
-    oReviewData.aMediumStore = [];
-    oReviewData.aHardStore = [];
-    oReviewData.aEasyCycle = [];
-    oReviewData.aMediumCycle = [];
-    oReviewData.aHardCycle = [];
-    oReviewData.nLearnedKanji = 0;
+    oReviewData.oData = {
+        hardStorage: [],
+        mediumStorage: [],
+        easyStorage: [],
+        hardCycle: [],
+        mediumCycle: [],
+        easyCycle: [],
+        learnedKanji: 0
+    };
+
+    /**
+     * The persistence class.
+     * @type {}
+     */
+    oReviewData.oReviewDataPersistence = null;
 
     oReviewData.getHardStorage = getHardStorage;
     oReviewData.getMediumStorage = getMediumStorage;
@@ -30,14 +38,14 @@ function ReviewData(oReviewDataPersistence){
     oReviewData.getLearnedKanji = getLearnedKanji;
     oReviewData.setLearnedKanji = setLearnedKanji;
 
-    initReviewData();
+    initOptions(oOptions);
 
     /**
      * Returns the hard storage.
      * @returns {Array} The hard storage.
      */
     function getHardStorage(){
-        return oReviewData.aHardStore;
+        return oReviewData.oData.hardStorage;
     }
 
     /**
@@ -45,7 +53,7 @@ function ReviewData(oReviewDataPersistence){
      * @returns {Array} The medium storage.
      */
     function getMediumStorage(){
-        return oReviewData.aMediumStore;
+        return oReviewData.oData.mediumStorage;
     }
 
     /**
@@ -53,7 +61,7 @@ function ReviewData(oReviewDataPersistence){
      * @returns {Array} The easy storage.
      */
     function getEasyStorage(){
-        return oReviewData.aEasyStore;
+        return oReviewData.oData.easyStorage;
     }
 
     /**
@@ -61,7 +69,7 @@ function ReviewData(oReviewDataPersistence){
      * @returns {Array} Array with the kanji IDs of the hard cycle.
      */
     function getHardCycle(){
-        return oReviewData.aHardCycle;
+        return oReviewData.oData.hardCycle;
     }
 
     /**
@@ -69,7 +77,7 @@ function ReviewData(oReviewDataPersistence){
      * @returns {Array} Array with the kanji IDs of the medium cycle.
      */
     function getMediumCycle(){
-        return oReviewData.aMediumCycle;
+        return oReviewData.oData.mediumCycle;
     }
 
     /**
@@ -77,7 +85,7 @@ function ReviewData(oReviewDataPersistence){
      * @returns {Array} Array with the kanji IDs of the easy cycle.
      */
     function getEasyCycle(){
-        return oReviewData.aEasyCycle;
+        return oReviewData.oData.easyCycle;
     }
 
     /**
@@ -85,7 +93,7 @@ function ReviewData(oReviewDataPersistence){
      * @returns {number} The number of learned kanji.
      */
     function getLearnedKanji(){
-        return oReviewData.nLearnedKanji;
+        return oReviewData.oData.learnedKanji;
     }
 
     /**
@@ -93,19 +101,20 @@ function ReviewData(oReviewDataPersistence){
      * @param nLearnedKanji The number of learned kanji.
      */
     function setLearnedKanji(nLearnedKanji){
-        oReviewData.nLearnedKanji = nLearnedKanji;
+        oReviewData.oData.learnedKanji = nLearnedKanji;
     }
 
     /**
-     * Initialize the review data by retrieving the data from the persistence interface.
+     * Gets the elements in the Option object and assigns them to object properties so then can be used in the class
+     * methods.
+     * @param oOptions The object containing the class dependencies.
      */
-    function initReviewData(){
-        oReviewData.aEasyStore = oReviewDataPersistence.getEasyStorage();
-        oReviewData.aMediumStore = oReviewDataPersistence.getMediumStorage();
-        oReviewData.aHardStore = oReviewDataPersistence.getHardStorage();
-        oReviewData.aEasyCycle = oReviewDataPersistence.getEasyCycle();
-        oReviewData.aMediumCycle = oReviewDataPersistence.getMediumCycle();
-        oReviewData.aHardCycle = oReviewDataPersistence.getHardCycle();
-        oReviewData.nLearnedKanji = oReviewDataPersistence.getLearnedKanji();
+    function initOptions(oOptions){
+        if(oOptions instanceof Object){
+            if(oOptions.reviewDataPersistence){
+                oReviewData.oReviewDataPersistence = oOptions.reviewDataPersistence;
+                oReviewData.oData = oReviewData.oReviewDataPersistence.getReviewData();
+            }
+        }
     }
 }
