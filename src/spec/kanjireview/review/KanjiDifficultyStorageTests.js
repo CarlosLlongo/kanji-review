@@ -74,8 +74,13 @@ describe('KanjiDifficultyStorage', function() {
 
         oKanjiDifficultyStorage.setStorage([1,2,3,4,5,6]);
         oKanjiDifficultyStorage.setCurrentCycle([2,4,5]);
-        oKanjiDifficultyStorage.getFromCycle(8);
+        aCycleIds = oKanjiDifficultyStorage.getFromCycle(8);
+        expect(containSameElements(aCycleIds, [1,2,3,4,5,6])).toBe(true);
+        expect(oKanjiDifficultyStorage.getCurrentCycle().length).toBe(0);
 
+        oKanjiDifficultyStorage.setCurrentCycle([2,4,5,6]);
+        oKanjiDifficultyStorage.getFromCycle(3);
+        expect(oKanjiDifficultyStorage.getCurrentCycle().length).toBe(1);
     });
 
     it("can get unique cycle + storage when required is bigger than storage", function () {
@@ -89,12 +94,20 @@ describe('KanjiDifficultyStorage', function() {
 
     it("can get unique cycle + storage when required is bigger than cycle", function () {
         var oKanjiDifficultyStorage = new KanjiDifficultyStorage();
-        oKanjiDifficultyStorage.setStorage([1,2,3,4,5,6]);
-        oKanjiDifficultyStorage.setCurrentCycle([2,4,5]);
-        var aCycleIds = oKanjiDifficultyStorage.getFromCycle(5);
+        oKanjiDifficultyStorage.setStorage([1,2,3,4,5,6,7,8,9,10]);
+        oKanjiDifficultyStorage.setCurrentCycle([1,3,5,7,9]);
+        var aCycleIds = oKanjiDifficultyStorage.getFromCycle(8);
 
-        expect(aCycleIds.length).toBe(5);
-        expect(oKanjiDifficultyStorage.getCurrentCycle().length).toBe(4);
+        expect(aCycleIds.length).toBe(8);
+        expect(oKanjiDifficultyStorage.getCurrentCycle().length).toBe(7);
+    });
+
+    it("can remove from storage", function () {
+        var oKanjiDifficultyStorage = new KanjiDifficultyStorage();
+        oKanjiDifficultyStorage.setStorage([1,2,3,4,5,6,7,8,9,10]);
+
+        oKanjiDifficultyStorage.removeFromStorage(3);
+        expect(oKanjiDifficultyStorage.getStorage()).toEqual([1,2,4,5,6,7,8,9,10]);
     });
 
 });
