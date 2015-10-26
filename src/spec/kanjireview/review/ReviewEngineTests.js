@@ -1,8 +1,7 @@
 describe('ReviewEngine', function(){
 
     it('can create a ReviewEngine object', function(){
-        var oReviewDataPersistenceMock = mockObject(new ReviewDataPersistence());
-        var oReviewDataMock = mockObject(new ReviewData(oReviewDataPersistenceMock));
+        var oReviewDataMock = mockObject(new ReviewData());
         var oReviewBatchMock = mockObject(new ReviewBatch());
         var oKanjiCollectionMock = mockObject(new KanjiCollection());
 
@@ -14,8 +13,7 @@ describe('ReviewEngine', function(){
     });
 
     it("can get learned kanji", function () {
-        var oReviewDataPersistenceMock = mockObject(new ReviewDataPersistence());
-        var oReviewDataMock = mockObject(new ReviewData(oReviewDataPersistenceMock));
+        var oReviewDataMock = mockObject(new ReviewData());
         var oReviewBatchMock = mockObject(new ReviewBatch());
         var oKanjiCollectionMock = mockObject(new KanjiCollection());
         createStub(oReviewDataMock, 'getLearnedKanji', 67);
@@ -30,8 +28,7 @@ describe('ReviewEngine', function(){
     });
 
     it("can set a learned kanji number", function () {
-        var oReviewDataPersistenceMock = mockObject(new ReviewDataPersistence());
-        var oReviewDataMock = mockObject(new ReviewData(oReviewDataPersistenceMock));
+        var oReviewDataMock = mockObject(new ReviewData());
         var oReviewBatchMock = mockObject(new ReviewBatch());
         var oKanjiCollectionMock = mockObject(new KanjiCollection());
         spyFunction(oReviewDataMock, 'setLearnedKanji');
@@ -48,8 +45,7 @@ describe('ReviewEngine', function(){
     });
 
     it("can get next kanji", function () {
-        var oReviewDataPersistenceMock = mockObject(new ReviewDataPersistence());
-        var oReviewDataMock = mockObject(new ReviewData(oReviewDataPersistenceMock));
+        var oReviewDataMock = mockObject(new ReviewData());
         createStub(oReviewDataMock, 'getLearnedKanji', 1);
 
         var oKanjiMock = mockObject(new Kanji());
@@ -102,5 +98,51 @@ describe('ReviewEngine', function(){
         oNextKanji = oReviewEngine.getNextKanji();
         var sAnotherKanjiId = oNextKanji.getId();
         expect(['1','2'].indexOf(sAnotherKanjiId)).not.toEqual(-1);
+    });
+
+    it("can add a new result", function () {
+        var oReviewDataMock = mockObject(new ReviewData());
+        var oReviewBatchMock = mockObject(new ReviewBatch());
+        var oKanjiCollectionMock = mockObject(new KanjiCollection());
+        var oKanjiDifficultyManagerMock = mockObject(new KanjiDifficultyManager());
+        spyFunction(oKanjiDifficultyManagerMock, 'addResult');
+
+        var oReviewEngine = new ReviewEngine({
+            reviewData: oReviewDataMock,
+            kanjiCollection: oKanjiCollectionMock,
+            reviewBatch: oReviewBatchMock,
+            kanjiDifficultyManager: oKanjiDifficultyManagerMock
+        });
+
+        oReviewEngine.addResult();
+        expect(wasCalled(oKanjiDifficultyManagerMock, 'addResult')).toBe(true);
+    });
+
+    it("can end review", function () {
+        var oReviewBatchMock = mockObject(new ReviewBatch());
+        var oKanjiDifficultyManagerMock = mockObject(new KanjiDifficultyManager());
+        spyFunction(oKanjiDifficultyManagerMock, 'saveStatistics');
+
+        var oReviewEngine = new ReviewEngine({
+            reviewBatch: oReviewBatchMock,
+            kanjiDifficultyManager: oKanjiDifficultyManagerMock
+        });
+
+        oReviewEngine.endReview();
+        expect(wasCalled(oKanjiDifficultyManagerMock, 'saveStatistics')).toBe(true);
+    });
+
+    it("can save statistics", function () {
+        var oReviewBatchMock = mockObject(new ReviewBatch());
+        var oKanjiDifficultyManagerMock = mockObject(new KanjiDifficultyManager());
+        spyFunction(oKanjiDifficultyManagerMock, 'clearStatistics');
+
+        var oReviewEngine = new ReviewEngine({
+            reviewBatch: oReviewBatchMock,
+            kanjiDifficultyManager: oKanjiDifficultyManagerMock
+        });
+
+        oReviewEngine.clearStatistics();
+        expect(wasCalled(oKanjiDifficultyManagerMock, 'clearStatistics')).toBe(true);
     });
 });
