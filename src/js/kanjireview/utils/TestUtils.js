@@ -67,8 +67,11 @@ function spyFunction(oObject, sMethodName){
     }
 
     oObject['wasCalled'+sMethodName] = false;
-    oObject[sMethodName] = function(){
+    oObject[sMethodName] = function(mParam1, mParam2, mParam3){
         oObject['wasCalled'+sMethodName] = true;
+        oObject['wasCalled'+sMethodName+'Param1'] = mParam1;
+        oObject['wasCalled'+sMethodName+'Param2'] = mParam2;
+        oObject['wasCalled'+sMethodName+'Param3'] = mParam3;
     }
 }
 
@@ -81,4 +84,15 @@ function spyFunction(oObject, sMethodName){
  */
 function wasCalled(oObject, sMethodName){
     return oObject['wasCalled'+sMethodName];
+}
+
+/**
+ * Obtains the parameter passed to the called function.
+ * @param oObject The Object that contains the method.
+ * @param sMethodName The name of the method to check.
+ * @param nParamPosition The position of the parameter in the method parameter list.
+ * @returns {Object} The value passed as a parameter to the method.
+ */
+function wasCalledParameter(oObject, sMethodName, nParamPosition){
+    return oObject['wasCalled'+sMethodName+'Param'+nParamPosition];
 }
