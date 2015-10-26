@@ -53,4 +53,11 @@ describe('KanjiStatistics', function(){
         expect(oKanjiStatistics.getDifficulty()).toEqual('easy');
     });
 
+    it("can get as JSON object", function () {
+        var oKanjiStatistics = new KanjiStatistics('1', []);
+        expect(oKanjiStatistics.toJsonObject()).toEqual([]);
+
+        oKanjiStatistics.setResults([1, 0, 0]);
+        expect(oKanjiStatistics.toJsonObject()).toEqual([1, 0, 0]);
+    });
 });
