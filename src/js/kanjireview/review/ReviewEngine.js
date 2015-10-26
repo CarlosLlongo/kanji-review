@@ -35,10 +35,18 @@ function ReviewEngine(oOptions){
      * @type {KanjiCollection}
      */
     oReviewEngine.oKanjiCollection = null;
+    /**
+     * The Kanji difficulty manager where we can update the status of each kanji.
+     * @type {KanjiDifficultyManager}
+     */
+    oReviewEngine.oKanjiDifficultyManager = null;
 
     oReviewEngine.getLearnedKanji = getLearnedKanji;
     oReviewEngine.setLearnedKanji = setLearnedKanji;
     oReviewEngine.getNextKanji = getNextKanji;
+    oReviewEngine.addResult = addResult;
+    oReviewEngine.endReview = endReview;
+    oReviewEngine.clearStatistics = clearStatistics;
 
     initOptions(oOptions);
     populateBatch();
@@ -81,6 +89,32 @@ function ReviewEngine(oOptions){
     }
 
     /**
+     * Adds a new result to the statistics of the Kanji and updates its difficulty.
+     * @param {String} sKanjiId The ID of the kanji
+     * @param {Integer} nResult The result of the review of the kanji (1: correct; 0: incorrect)
+     */
+    function addResult(sKanjiId, nResult){
+        oReviewEngine.oKanjiDifficultyManager.addResult(sKanjiId, nResult);
+    }
+
+    /**
+     * Executes the required operations when the review is ended. At the moment the only requirement is to save the
+     * statistics.
+     */
+    function endReview(){
+        oReviewEngine.oKanjiDifficultyManager.saveStatistics();
+    }
+
+    /**
+     * Instructs the Kanji Difficulty manager to clear the Kanji Statistics.
+     */
+    function clearStatistics(){
+        oReviewEngine.oKanjiDifficultyManager.clearStatistics();
+    }
+
+    // PRIVATE //
+
+    /**
      * Gets the elements in the Option object and assigns them to object properties so then can be used in the class
      * methods.
      * @param oOptions The object containing the class dependencies.
@@ -95,6 +129,9 @@ function ReviewEngine(oOptions){
             }
             if(oOptions.kanjiCollection){
                 oReviewEngine.oKanjiCollection = oOptions.kanjiCollection;
+            }
+            if(oOptions.kanjiDifficultyManager){
+                oReviewEngine.oKanjiDifficultyManager = oOptions.kanjiDifficultyManager;
             }
         }
     }
