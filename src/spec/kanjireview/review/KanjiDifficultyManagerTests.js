@@ -269,4 +269,55 @@ describe('KanjiDifficultyManager', function(){
         oKanjiDifficultyManager.clearEasyStorage();
         expect(oKanjiDifficultyManager.getEasyStorage()).toEqual([]);
     });
+
+    it("can update kanji statistics", function () {
+        var oKanjiStatisticsCollectionMock = mockObject(new KanjiStatisticsCollection());
+        createStub(oKanjiStatisticsCollectionMock, 'updateKanjiStatistics', {prevDifficulty: 'hard', newDifficulty: 'hard'});
+        var oHardStorageMock = mockObject(new KanjiDifficultyStorage());
+        spyFunction(oHardStorageMock, 'removeFromStorage');
+        var oMediumStorageMock = mockObject(new KanjiDifficultyStorage());
+        spyFunction(oMediumStorageMock, 'store');
+        var oKanjiDifficultyManager = new KanjiDifficultyManager(
+            {
+                hardStorage: oHardStorageMock,
+                mediumStorage: oMediumStorageMock,
+                kanjiStatisticsCollection: oKanjiStatisticsCollectionMock
+            }
+        );
+
+        oKanjiDifficultyManager.addResult('3', true);
+        expect(wasCalled(oHardStorageMock, 'removeFromStorage')).toBe(false);
+        expect(wasCalled(oMediumStorageMock, 'store')).toBe(false);
+
+        createStub(oKanjiStatisticsCollectionMock, 'updateKanjiStatistics', {prevDifficulty: 'hard', newDifficulty: 'medium'});
+        oKanjiDifficultyManager.addResult('3', true);
+        expect(wasCalled(oHardStorageMock, 'removeFromStorage')).toBe(true);
+        expect(wasCalled(oMediumStorageMock, 'store')).toBe(true);
+    });
+
+    it("can save kanji statistics", function () {
+        var oKanjiStatisticsCollectionMock = mockObject(new KanjiStatisticsCollection());
+        spyFunction(oKanjiStatisticsCollectionMock, 'saveToLocalStorage');
+        var oKanjiDifficultyManager = new KanjiDifficultyManager(
+            {
+                kanjiStatisticsCollection: oKanjiStatisticsCollectionMock
+            }
+        );
+
+        oKanjiDifficultyManager.saveStatistics();
+        wasCalled(oKanjiStatisticsCollectionMock, 'saveToLocalStorage');
+    });
+
+    it("can clear kanji statistics", function () {
+        var oKanjiStatisticsCollectionMock = mockObject(new KanjiStatisticsCollection());
+        spyFunction(oKanjiStatisticsCollectionMock, 'clearStatistics');
+        var oKanjiDifficultyManager = new KanjiDifficultyManager(
+            {
+                kanjiStatisticsCollection: oKanjiStatisticsCollectionMock
+            }
+        );
+
+        oKanjiDifficultyManager.saveStatistics();
+        wasCalled(oKanjiStatisticsCollectionMock, 'clearStatistics');
+    });
 });
