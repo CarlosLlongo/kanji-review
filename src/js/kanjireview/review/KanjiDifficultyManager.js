@@ -196,10 +196,10 @@ function KanjiDifficultyManager(oOptions){
      * Adds a result to the kanji statistics. If the difficulty of the kanji has changed wit the new result, the
      * storages will be updated.
      * @param sKanjiId The Kanji ID to update.
-     * @param bResult The result in the review.
+     * @param nResult The result in the review.
      */
-    function addResult(sKanjiId, bResult){
-        var oStatus = oKanjiDifficultyManager.oKanjiStatisticsCollection.updateKanjiStatistics(sKanjiId, bResult);
+    function addResult(sKanjiId, nResult){
+        var oStatus = oKanjiDifficultyManager.oKanjiStatisticsCollection.updateKanjiStatistics(sKanjiId, nResult);
 
         if(oStatus.prevDifficulty !== oStatus.newDifficulty){
             oKanjiDifficultyManager.oStorages[oStatus.prevDifficulty].removeFromStorage(sKanjiId);
