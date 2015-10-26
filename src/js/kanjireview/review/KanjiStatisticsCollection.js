@@ -1,13 +1,29 @@
-function KanjiStatisticsCollection(){
+/**
+ * This class represents a collection of all the Kanji Statistics for those Kanjis that have been reviewed.
+ * @param oKanjiStatisticsDataPersistence The persistence object tasked with saving the kanji statistics.
+ * @constructor
+ */
+function KanjiStatisticsCollection(oKanjiStatisticsDataPersistence){
 
     var oKanjiStatisticsCollection = this;
 
+    /**
+     * The collection of KanjiStatistics object.
+     * @type {{KanjiStatistics}}
+     */
     oKanjiStatisticsCollection.oCollection = {};
+    /**
+     * The persistence class.
+     */
+    oKanjiStatisticsCollection.oKanjiStatisticsDataPersistence = oKanjiStatisticsDataPersistence;
 
     oKanjiStatisticsCollection.addKanjiStatistics = addKanjiStatistics;
     oKanjiStatisticsCollection.getKanjiStatistics = getKanjiStatistics;
     oKanjiStatisticsCollection.updateKanjiStatistics = updateKanjiStatistics;
     oKanjiStatisticsCollection.populateFromJsonObject = populateFromJsonObject;
+    oKanjiStatisticsCollection.loadFromLocalStorage = loadFromLocalStorage;
+    oKanjiStatisticsCollection.saveToLocalStorage = saveToLocalStorage;
+    oKanjiStatisticsCollection.clearStatistics = clearStatistics;
 
     /**
      * Adds a KanjiStatistics to the collection.
@@ -31,12 +47,15 @@ function KanjiStatisticsCollection(){
      * ID, a new KanjiStatistics will be added to the collection containing the given result. The returned object
      * contains the difficulty of the kanji before the update was done and after the update was done.
      *
-     * @param sId
-     * @param bResult
+     * @param sId The ID of the Kanji whose statistics to update.
+     * @param nResult The result of the kanji review.
      * @returns {{prevDifficulty: string, newDifficulty: string}} A duo of values, with previous and new kanji difficulty
      */
-    function updateKanjiStatistics(sId, bResult){
-        var oUpdateStatus = {};
+    function updateKanjiStatistics(sId, nResult){
+        var oUpdateStatus = {
+            prevDifficulty: '',
+            newDifficulty: ''
+        };
 
         var oKanjiStatistics = oKanjiStatisticsCollection.oCollection[sId];
 
@@ -45,11 +64,11 @@ function KanjiStatisticsCollection(){
             oKanjiStatisticsCollection.oCollection[sId] = oKanjiStatistics;
         }
 
-        oUpdateStatus['prevDifficulty'] = oKanjiStatistics.getDifficulty();
+        oUpdateStatus.prevDifficulty = oKanjiStatistics.getDifficulty();
 
-        oKanjiStatistics.addResult(bResult);
+        oKanjiStatistics.addResult(nResult);
 
-        oUpdateStatus['newDifficulty'] = oKanjiStatistics.getDifficulty();
+        oUpdateStatus.newDifficulty = oKanjiStatistics.getDifficulty();
 
         return oUpdateStatus;
     }
@@ -62,6 +81,34 @@ function KanjiStatisticsCollection(){
         for(var sKey in oJsonObject){
             addKanjiStatistics(new KanjiStatistics(sKey, oJsonObject[sKey]));
         }
+    }
+
+    /**
+     * Loads the statistics from local storage.
+     */
+    function loadFromLocalStorage(){
+        var oJsonObject = oKanjiStatisticsDataPersistence.getKanjiStatisticsData();
+        console.log(oJsonObject);
+        populateFromJsonObject(oJsonObject);
+    }
+
+    /**
+     * Converts each KanjiStatistics to a JSON object, and saves them to local storage.
+     */
+    function saveToLocalStorage(){
+        var oJsonObject = {};
+        for(var sKey in oKanjiStatisticsCollection.oCollection){
+            oJsonObject[sKey] = oKanjiStatisticsCollection.oCollection[sKey].toJsonObject();
+        }
+        oKanjiStatisticsDataPersistence.saveKanjiStatisticsData(oJsonObject);
+    }
+
+    /**
+     * Clears the KanjiStatistics collection and deletes the data in local storage.
+     */
+    function clearStatistics(){
+        oKanjiStatisticsCollection.oCollection = {};
+        oKanjiStatisticsDataPersistence.saveKanjiStatisticsData({});
     }
 
 }
