@@ -24,6 +24,7 @@ function KanjiStatisticsCollection(oKanjiStatisticsDataPersistence){
     oKanjiStatisticsCollection.loadFromLocalStorage = loadFromLocalStorage;
     oKanjiStatisticsCollection.saveToLocalStorage = saveToLocalStorage;
     oKanjiStatisticsCollection.clearStatistics = clearStatistics;
+    oKanjiStatisticsCollection.hasStatistics = hasStatistics;
 
     /**
      * Adds a KanjiStatistics to the collection.
@@ -88,7 +89,6 @@ function KanjiStatisticsCollection(oKanjiStatisticsDataPersistence){
      */
     function loadFromLocalStorage(){
         var oJsonObject = oKanjiStatisticsDataPersistence.getKanjiStatisticsData();
-        console.log(oJsonObject);
         populateFromJsonObject(oJsonObject);
     }
 
@@ -109,6 +109,15 @@ function KanjiStatisticsCollection(oKanjiStatisticsDataPersistence){
     function clearStatistics(){
         oKanjiStatisticsCollection.oCollection = {};
         oKanjiStatisticsDataPersistence.saveKanjiStatisticsData({});
+    }
+
+    /**
+     * Checks if there are statistics for the Kanji.
+     * @param sId The ID of the Kanji
+     * @returns {boolean} true if there are statistics, false otherwise.
+     */
+    function hasStatistics(sId){
+        return sId in oKanjiStatisticsCollection.oCollection;
     }
 
 }
