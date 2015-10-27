@@ -108,6 +108,9 @@ describe('KanjiDifficultyStorage', function() {
 
         oKanjiDifficultyStorage.removeFromStorage(3);
         expect(oKanjiDifficultyStorage.getStorage()).toEqual([1,2,4,5,6,7,8,9,10]);
+
+        oKanjiDifficultyStorage.removeFromStorage(33);
+        expect(oKanjiDifficultyStorage.getStorage()).toEqual([1,2,4,5,6,7,8,9,10]);
     });
 
 });
