@@ -275,6 +275,7 @@ describe('KanjiDifficultyManager', function(){
         createStub(oKanjiStatisticsCollectionMock, 'updateKanjiStatistics', {prevDifficulty: 'hard', newDifficulty: 'hard'});
         var oHardStorageMock = mockObject(new KanjiDifficultyStorage());
         spyFunction(oHardStorageMock, 'removeFromStorage');
+        spyFunction(oHardStorageMock, 'store');
         var oMediumStorageMock = mockObject(new KanjiDifficultyStorage());
         spyFunction(oMediumStorageMock, 'store');
         var oKanjiDifficultyManager = new KanjiDifficultyManager(
@@ -286,8 +287,9 @@ describe('KanjiDifficultyManager', function(){
         );
 
         oKanjiDifficultyManager.addResult('3', true);
-        expect(wasCalled(oHardStorageMock, 'removeFromStorage')).toBe(false);
+        expect(wasCalled(oHardStorageMock, 'store')).toBe(true);
         expect(wasCalled(oMediumStorageMock, 'store')).toBe(false);
+        resetCalled(oHardStorageMock, 'removeFromStorage');
 
         createStub(oKanjiStatisticsCollectionMock, 'updateKanjiStatistics', {prevDifficulty: 'hard', newDifficulty: 'medium'});
         oKanjiDifficultyManager.addResult('3', true);
@@ -319,5 +321,46 @@ describe('KanjiDifficultyManager', function(){
 
         oKanjiDifficultyManager.saveStatistics();
         wasCalled(oKanjiStatisticsCollectionMock, 'clearStatistics');
+    });
+
+    it("can update review data", function () {
+        var oHardStorageMock = mockObject(new KanjiDifficultyStorage());
+        createStub(oHardStorageMock, 'getStorage', ['1', '2', '3']);
+        createStub(oHardStorageMock, 'getCurrentCycle', ['2', '3']);
+        var oMediumStorageMock = mockObject(new KanjiDifficultyStorage());
+        createStub(oMediumStorageMock, 'getStorage', ['4', '5', '6']);
+        createStub(oMediumStorageMock, 'getCurrentCycle', ['4', '6']);
+        var oEasyStorageMock = mockObject(new KanjiDifficultyStorage());
+        createStub(oEasyStorageMock, 'getStorage', ['7', '8', '9']);
+        createStub(oEasyStorageMock, 'getCurrentCycle', ['7']);
+        var oReviewDataMock = mockObject(new ReviewData());
+        spyFunction(oReviewDataMock, 'setHardStorage');
+        spyFunction(oReviewDataMock, 'setMediumStorage');
+        spyFunction(oReviewDataMock, 'setEasyStorage');
+        spyFunction(oReviewDataMock, 'setHardCycle');
+        spyFunction(oReviewDataMock, 'setMediumCycle');
+        spyFunction(oReviewDataMock, 'setEasyCycle');
+
+        var oKanjiDifficultyManager = new KanjiDifficultyManager(
+            {
+                hardStorage: oHardStorageMock,
+                mediumStorage: oMediumStorageMock,
+                easyStorage: oEasyStorageMock
+            }
+        );
+
+        oKanjiDifficultyManager.updateReviewData(oReviewDataMock);
+        expect(wasCalled(oReviewDataMock, 'setHardStorage')).toBe(true);
+        expect(wasCalledParameter(oReviewDataMock, 'setHardStorage', 1)).toEqual(['1', '2', '3']);
+        expect(wasCalled(oReviewDataMock, 'setMediumStorage')).toBe(true);
+        expect(wasCalledParameter(oReviewDataMock, 'setMediumStorage', 1)).toEqual(['4', '5', '6']);
+        expect(wasCalled(oReviewDataMock, 'setEasyStorage')).toBe(true);
+        expect(wasCalledParameter(oReviewDataMock, 'setEasyStorage', 1)).toEqual(['7', '8', '9']);
+        expect(wasCalled(oReviewDataMock, 'setHardCycle')).toBe(true);
+        expect(wasCalledParameter(oReviewDataMock, 'setHardCycle', 1)).toEqual(['2', '3']);
+        expect(wasCalled(oReviewDataMock, 'setMediumCycle')).toBe(true);
+        expect(wasCalledParameter(oReviewDataMock, 'setMediumCycle', 1)).toEqual(['4', '6']);
+        expect(wasCalled(oReviewDataMock, 'setEasyCycle')).toBe(true);
+        expect(wasCalledParameter(oReviewDataMock, 'setEasyCycle', 1)).toEqual(['7']);
     });
 });
