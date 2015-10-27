@@ -45,6 +45,7 @@ function KanjiDifficultyManager(oOptions){
     oKanjiDifficultyManager.addResult = addResult;
     oKanjiDifficultyManager.saveStatistics = saveStatistics;
     oKanjiDifficultyManager.clearStatistics = clearStatistics;
+    oKanjiDifficultyManager.updateReviewData = updateReviewData;
 
     initOptions(oOptions);
 
@@ -199,9 +200,10 @@ function KanjiDifficultyManager(oOptions){
      * @param nResult The result in the review.
      */
     function addResult(sKanjiId, nResult){
+        var bHasStatistics = oKanjiDifficultyManager.oKanjiStatisticsCollection.hasStatistics(sKanjiId);
         var oStatus = oKanjiDifficultyManager.oKanjiStatisticsCollection.updateKanjiStatistics(sKanjiId, nResult);
 
-        if(oStatus.prevDifficulty !== oStatus.newDifficulty){
+        if(oStatus.prevDifficulty !== oStatus.newDifficulty || !bHasStatistics){
             oKanjiDifficultyManager.oStorages[oStatus.prevDifficulty].removeFromStorage(sKanjiId);
             oKanjiDifficultyManager.oStorages[oStatus.newDifficulty].store(sKanjiId);
         }
@@ -219,6 +221,20 @@ function KanjiDifficultyManager(oOptions){
      */
     function clearStatistics(){
         oKanjiDifficultyManager.oKanjiStatisticsCollection.clearStatistics();
+    }
+
+    /**
+     * Updates the data in the ReviewData object with the information extracted from the DifficultyStorages.
+     * @param oReviewData The ReviewData object to update.
+     */
+    function updateReviewData(oReviewData){
+        oReviewData.setHardStorage(oKanjiDifficultyManager.oStorages.hard.getStorage());
+        oReviewData.setMediumStorage(oKanjiDifficultyManager.oStorages.medium.getStorage());
+        oReviewData.setEasyStorage(oKanjiDifficultyManager.oStorages.easy.getStorage());
+
+        oReviewData.setHardCycle(oKanjiDifficultyManager.oStorages.hard.getCurrentCycle());
+        oReviewData.setMediumCycle(oKanjiDifficultyManager.oStorages.medium.getCurrentCycle());
+        oReviewData.setEasyCycle(oKanjiDifficultyManager.oStorages.easy.getCurrentCycle());
     }
 
     // PRIVATE //
