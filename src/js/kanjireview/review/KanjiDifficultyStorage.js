@@ -22,7 +22,6 @@ function KanjiDifficultyStorage(oOptions){
     oKanjiDifficultyStorage.store = store;
     oKanjiDifficultyStorage.storeAll = storeAll;
     oKanjiDifficultyStorage.removeFromStorage = removeFromStorage;
-    oKanjiDifficultyStorage.getStorage = getStorage;
     oKanjiDifficultyStorage.getFromCycle = getFromCycle;
     oKanjiDifficultyStorage.setCurrentCycle = setCurrentCycle;
     oKanjiDifficultyStorage.getCurrentCycle = getCurrentCycle;
@@ -52,8 +51,10 @@ function KanjiDifficultyStorage(oOptions){
      * @param sId The Kanji ID to remove.
      */
     function removeFromStorage(sId){
-        oKanjiDifficultyStorage.aStorage.splice(
-            oKanjiDifficultyStorage.aStorage.indexOf(sId), 1);
+        if(oKanjiDifficultyStorage.aStorage.indexOf(sId) !== -1){
+            oKanjiDifficultyStorage.aStorage.splice(
+                oKanjiDifficultyStorage.aStorage.indexOf(sId), 1);
+        }
     }
 
     /**
