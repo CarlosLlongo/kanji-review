@@ -37,4 +37,20 @@ describe('ReviewData', function(){
         var oReviewData = new ReviewData({reviewDataPersistence: oReviewDataPersistenceMock});
         expect(oReviewData.getLearnedKanji()).toEqual(1342);
     });
+
+    it("can save review data to local storage", function () {
+        var oReviewDataPersistenceMock = mockObject({getReviewData: function (){}, saveReviewData: function (){}});
+        createStub(oReviewDataPersistenceMock, 'getReviewData', {
+            learnedKanji: 1342
+        });
+        spyFunction(oReviewDataPersistenceMock, 'saveReviewData');
+
+        var oReviewData = new ReviewData({reviewDataPersistence: oReviewDataPersistenceMock});
+
+        oReviewData.saveReviewData();
+
+        expect(wasCalled(oReviewDataPersistenceMock, 'saveReviewData')).toBe(true);
+        expect(wasCalledParameter(oReviewDataPersistenceMock, 'saveReviewData', 1))
+            .toEqual({learnedKanji: 1342});
+    });
 });
