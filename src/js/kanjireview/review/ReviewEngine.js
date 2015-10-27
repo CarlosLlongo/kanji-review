@@ -99,7 +99,7 @@ function ReviewEngine(oOptions){
 
     /**
      * Executes the required operations when the review is ended. At the moment the only requirement is to save the
-     * statistics.
+     * statistics and the review data.
      */
     function endReview(){
         oReviewEngine.oKanjiDifficultyManager.saveStatistics();
