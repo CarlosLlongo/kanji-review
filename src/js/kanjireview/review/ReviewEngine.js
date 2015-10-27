@@ -103,6 +103,8 @@ function ReviewEngine(oOptions){
      */
     function endReview(){
         oReviewEngine.oKanjiDifficultyManager.saveStatistics();
+        oReviewEngine.oKanjiDifficultyManager.updateReviewData(oReviewEngine.oReviewData);
+        oReviewEngine.oReviewData.saveReviewData();
     }
 
     /**
