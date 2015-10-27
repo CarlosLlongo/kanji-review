@@ -120,16 +120,22 @@ describe('ReviewEngine', function(){
 
     it("can end review", function () {
         var oReviewBatchMock = mockObject(new ReviewBatch());
+        var oReviewDataMock = mockObject(new ReviewData());
+        spyFunction(oReviewDataMock, 'saveReviewData');
         var oKanjiDifficultyManagerMock = mockObject(new KanjiDifficultyManager());
         spyFunction(oKanjiDifficultyManagerMock, 'saveStatistics');
+        spyFunction(oKanjiDifficultyManagerMock, 'updateReviewData');
 
         var oReviewEngine = new ReviewEngine({
             reviewBatch: oReviewBatchMock,
+            reviewData: oReviewDataMock,
             kanjiDifficultyManager: oKanjiDifficultyManagerMock
         });
 
         oReviewEngine.endReview();
         expect(wasCalled(oKanjiDifficultyManagerMock, 'saveStatistics')).toBe(true);
+        expect(wasCalled(oKanjiDifficultyManagerMock, 'updateReviewData')).toBe(true);
+        expect(wasCalled(oReviewDataMock, 'saveReviewData')).toBe(true);
     });
 
     it("can save statistics", function () {
