@@ -126,4 +126,15 @@ describe('KanjiStatisticsCollection', function(){
             .toEqual({});
     });
 
+    it("can check if kanji has statistics", function () {
+        var oKanjiStatisticsCollection = new KanjiStatisticsCollection();
+
+        expect(oKanjiStatisticsCollection.hasStatistics('3')).toBe(false);
+        oKanjiStatisticsCollection.updateKanjiStatistics('3', 1);
+        expect(oKanjiStatisticsCollection.hasStatistics('3')).toBe(true);
+        expect(oKanjiStatisticsCollection.hasStatistics('45')).toBe(false);
+        oKanjiStatisticsCollection.updateKanjiStatistics('45', 0);
+        expect(oKanjiStatisticsCollection.hasStatistics('45')).toBe(true);
+    });
+
 });
