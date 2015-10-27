@@ -87,6 +87,15 @@ function wasCalled(oObject, sMethodName){
 }
 
 /**
+ * Resets the status of a function to a not called state.
+ * @param oObject The Object that contains the method.
+ * @param sMethodName The name of the method to reset.
+ */
+function resetCalled(oObject, sMethodName){
+    oObject['wasCalled'+sMethodName] = false;
+}
+
+/**
  * Obtains the parameter passed to the called function.
  * @param oObject The Object that contains the method.
  * @param sMethodName The name of the method to check.
