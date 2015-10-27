@@ -30,22 +30,40 @@ function ReviewData(oOptions){
     oReviewData.oReviewDataPersistence = null;
 
     oReviewData.getHardStorage = getHardStorage;
+    oReviewData.setHardStorage = setHardStorage;
     oReviewData.getMediumStorage = getMediumStorage;
+    oReviewData.setMediumStorage = setMediumStorage;
     oReviewData.getEasyStorage = getEasyStorage;
+    oReviewData.setEasyStorage = setEasyStorage;
     oReviewData.getHardCycle = getHardCycle;
+    oReviewData.setHardCycle = setHardCycle;
     oReviewData.getMediumCycle = getMediumCycle;
+    oReviewData.setMediumCycle = setMediumCycle;
     oReviewData.getEasyCycle = getEasyCycle;
+    oReviewData.setEasyCycle = setEasyCycle;
     oReviewData.getLearnedKanji = getLearnedKanji;
     oReviewData.setLearnedKanji = setLearnedKanji;
+    oReviewData.saveReviewData = saveReviewData;
+
 
     initOptions(oOptions);
+
+    // PUBLIC //
 
     /**
      * Returns the hard storage.
      * @returns {Array} The hard storage.
      */
     function getHardStorage(){
-        return oReviewData.oData.hardStorage;
+        return oReviewData.oData.hardStorage || [];
+    }
+
+    /**
+     * Sets the hard storage.
+     * @param {Array} aHardStorage The hard storage.
+     */
+    function setHardStorage(aHardStorage){
+        oReviewData.oData.hardStorage = aHardStorage;
     }
 
     /**
@@ -53,7 +71,15 @@ function ReviewData(oOptions){
      * @returns {Array} The medium storage.
      */
     function getMediumStorage(){
-        return oReviewData.oData.mediumStorage;
+        return oReviewData.oData.mediumStorage || [];
+    }
+
+    /**
+     * Sets the medium storage.
+     * @param {Array} aMediumStorage The medium storage.
+     */
+    function setMediumStorage(aMediumStorage){
+        oReviewData.oData.mediumStorage = aMediumStorage;
     }
 
     /**
@@ -61,7 +87,15 @@ function ReviewData(oOptions){
      * @returns {Array} The easy storage.
      */
     function getEasyStorage(){
-        return oReviewData.oData.easyStorage;
+        return oReviewData.oData.easyStorage || [];
+    }
+
+    /**
+     * Sets the easy storage.
+     * @param {Array} aEasyStorage The easy storage.
+     */
+    function setEasyStorage(aEasyStorage){
+        oReviewData.oData.easyStorage = aEasyStorage;
     }
 
     /**
@@ -69,7 +103,15 @@ function ReviewData(oOptions){
      * @returns {Array} Array with the kanji IDs of the hard cycle.
      */
     function getHardCycle(){
-        return oReviewData.oData.hardCycle;
+        return oReviewData.oData.hardCycle || [];
+    }
+
+    /**
+     * Sets the hard cycle.
+     * @param {Array} aHardCycle The hard cycle.
+     */
+    function setHardCycle(aHardCycle){
+        oReviewData.oData.hardCycle = aHardCycle;
     }
 
     /**
@@ -77,7 +119,15 @@ function ReviewData(oOptions){
      * @returns {Array} Array with the kanji IDs of the medium cycle.
      */
     function getMediumCycle(){
-        return oReviewData.oData.mediumCycle;
+        return oReviewData.oData.mediumCycle || [];
+    }
+
+    /**
+     * Sets the medium cycle.
+     * @param {Array} aMediumCycle The medium cycle.
+     */
+    function setMediumCycle(aMediumCycle){
+        oReviewData.oData.mediumCycle = aMediumCycle;
     }
 
     /**
@@ -85,7 +135,15 @@ function ReviewData(oOptions){
      * @returns {Array} Array with the kanji IDs of the easy cycle.
      */
     function getEasyCycle(){
-        return oReviewData.oData.easyCycle;
+        return oReviewData.oData.easyCycle || [];
+    }
+
+    /**
+     * Sets the easy cycle.
+     * @param {Array} aEasyCycle The easy cycle.
+     */
+    function setEasyCycle(aEasyCycle){
+        oReviewData.oData.easyCycle = aEasyCycle;
     }
 
     /**
@@ -93,7 +151,7 @@ function ReviewData(oOptions){
      * @returns {number} The number of learned kanji.
      */
     function getLearnedKanji(){
-        return oReviewData.oData.learnedKanji;
+        return oReviewData.oData.learnedKanji || [];
     }
 
     /**
@@ -103,6 +161,15 @@ function ReviewData(oOptions){
     function setLearnedKanji(nLearnedKanji){
         oReviewData.oData.learnedKanji = nLearnedKanji;
     }
+
+    /**
+     * Instructs the ReviewData persistence to save the review data.
+     */
+    function saveReviewData(){
+        oReviewData.oReviewDataPersistence.saveReviewData(oReviewData.oData);
+    }
+
+    // PRIVATE //
 
     /**
      * Gets the elements in the Option object and assigns them to object properties so then can be used in the class
