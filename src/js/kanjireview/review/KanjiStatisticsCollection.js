@@ -23,7 +23,6 @@ function KanjiStatisticsCollection(oKanjiStatisticsDataPersistence){
     oKanjiStatisticsCollection.populateFromJsonObject = populateFromJsonObject;
     oKanjiStatisticsCollection.loadFromLocalStorage = loadFromLocalStorage;
     oKanjiStatisticsCollection.saveToLocalStorage = saveToLocalStorage;
-    oKanjiStatisticsCollection.clearStatistics = clearStatistics;
     oKanjiStatisticsCollection.hasStatistics = hasStatistics;
 
     /**
@@ -101,14 +100,6 @@ function KanjiStatisticsCollection(oKanjiStatisticsDataPersistence){
             oJsonObject[sKey] = oKanjiStatisticsCollection.oCollection[sKey].toJsonObject();
         }
         oKanjiStatisticsDataPersistence.saveKanjiStatisticsData(oJsonObject);
-    }
-
-    /**
-     * Clears the KanjiStatistics collection and deletes the data in local storage.
-     */
-    function clearStatistics(){
-        oKanjiStatisticsCollection.oCollection = {};
-        oKanjiStatisticsDataPersistence.saveKanjiStatisticsData({});
     }
 
     /**
