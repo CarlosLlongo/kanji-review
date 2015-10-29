@@ -1,12 +1,10 @@
 /**
  * This class will generate a batch of kanji IDs for a review session. The review batch will contain as many difficult
  * Kanjis as available, and the rest will be divided equally between medium and easy kanjis.
- * @param nLearnedKanji The total number of learned kanjis.
- * @param nNewLearnedKanji The number of kanji learned since the last review.
  * @param oOptions Contains the dependencies with other objects
  * @constructor
  */
-function ReviewBatch(nLearnedKanji, nNewLearnedKanji, oOptions){
+function ReviewBatch(oOptions){
 
     var oReviewBatch = this;
     /**
@@ -15,16 +13,6 @@ function ReviewBatch(nLearnedKanji, nNewLearnedKanji, oOptions){
      */
     var nMaxReviewBatchSize = 100;
 
-    /**
-     * The total number of learned kanjis.
-     * @type {Integer}
-     */
-    oReviewBatch.nLearnedKanji = nLearnedKanji;
-    /**
-     * The number of kanji learned since the last review.
-     * @type {Integer}
-     */
-    oReviewBatch.nNewLearnedKanji = nNewLearnedKanji;
     /**
      * The array containing the kanji IDs for this batch.
      * @type {Array}
@@ -65,21 +53,6 @@ function ReviewBatch(nLearnedKanji, nNewLearnedKanji, oOptions){
      */
     function populate(){
         oReviewBatch.aStorage = [];
-
-        if(nNewLearnedKanji <= nMaxReviewBatchSize){
-            for(var i = oReviewBatch.nLearnedKanji; i > nLearnedKanji - nNewLearnedKanji; i--){
-                oReviewBatch.aStorage.push(i);
-            }
-        }
-        else{
-            var aNewLearnedIds = fillArray(nLearnedKanji - nNewLearnedKanji + 1, nNewLearnedKanji);
-
-            var nKanjiId;
-            for(var i = 0; i < nMaxReviewBatchSize; i++){
-                nKanjiId = getAndRemoveRandomValue(aNewLearnedIds);
-                oReviewBatch.aStorage.push(nKanjiId);
-            }
-        }
 
         oReviewBatch.aStorage = oReviewBatch.aStorage.concat(
             oReviewBatch.oKanjiDifficultyManager.getFromHardCycle(remaining()));
