@@ -44,8 +44,8 @@ function KanjiDifficultyManager(oOptions){
     oKanjiDifficultyManager.clearEasyStorage = clearEasyStorage;
     oKanjiDifficultyManager.addResult = addResult;
     oKanjiDifficultyManager.saveStatistics = saveStatistics;
-    oKanjiDifficultyManager.clearStatistics = clearStatistics;
     oKanjiDifficultyManager.updateReviewData = updateReviewData;
+    oKanjiDifficultyManager.storeNewLearnedKanji = storeNewLearnedKanji;
 
     initOptions(oOptions);
 
@@ -217,13 +217,6 @@ function KanjiDifficultyManager(oOptions){
     }
 
     /**
-     * Instructs the Kanji Statistics collection to clear the Kanji Statistics.
-     */
-    function clearStatistics(){
-        oKanjiDifficultyManager.oKanjiStatisticsCollection.clearStatistics();
-    }
-
-    /**
      * Updates the data in the ReviewData object with the information extracted from the DifficultyStorages.
      * @param oReviewData The ReviewData object to update.
      */
@@ -235,6 +228,21 @@ function KanjiDifficultyManager(oOptions){
         oReviewData.setHardCycle(oKanjiDifficultyManager.oStorages.hard.getCurrentCycle());
         oReviewData.setMediumCycle(oKanjiDifficultyManager.oStorages.medium.getCurrentCycle());
         oReviewData.setEasyCycle(oKanjiDifficultyManager.oStorages.easy.getCurrentCycle());
+    }
+
+    /**
+     * Adds to the hard storage all new kanjis learned since the last review.
+     * @param nPrevLearned The kanjis learned in the previous review.
+     * @param nNewLearned The kanjis learned in the current review.
+     */
+    function storeNewLearnedKanji(nPrevLearned, nNewLearned){
+        var aNewLearnedKanjis = [];
+
+        for(var i = nNewLearned; i > nPrevLearned; i--){
+            aNewLearnedKanjis.push(i.toString());
+        }
+
+        oKanjiDifficultyManager.oStorages.hard.storeAll(aNewLearnedKanjis);
     }
 
     // PRIVATE //
