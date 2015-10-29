@@ -67,6 +67,19 @@ describe('ArrayUtils', function(){
         expect(aNumbers).toEqual([6,7,8,9,10]);
     });
 
+    it("can create a random array", function () {
+        var aRandomArray = generateRandomArray(0,0,1);
+        expect(containSameElements(aRandomArray, [0])).toBe(true);
+        aRandomArray = generateRandomArray(0,1,2);
+        expect(containSameElements(aRandomArray, [0, 1])).toBe(true);
+        aRandomArray = generateRandomArray(6,11,6);
+        expect(containSameElements(aRandomArray, [6,7,8,9,10,11])).toBe(true);
+        aRandomArray = generateRandomArray(6,11,3);
+        expect(aRandomArray.length).toBe(3);
+        aRandomArray = generateRandomArray(6,11,20);
+        expect(containSameElements(aRandomArray, [6,7,8,9,10,11])).toBe(true);
+    });
+
     it("can get and remove a random element", function () {
         var aOriginal = [];
         var nValue = getAndRemoveRandomValue(aOriginal);
@@ -77,7 +90,6 @@ describe('ArrayUtils', function(){
         expect(nValue).toBe(1);
         expect(aOriginal.length).toBe(0);
 
-        return;
         aOriginal = [1, 2, 3];
         nValue = getAndRemoveRandomValue(aOriginal);
         expect(nValue).toBeLessThan(4);
