@@ -5,9 +5,9 @@
         .module('kanjireview.review')
         .factory('ReviewService', ReviewService);
 
-    ReviewService.$inject = ['$state', 'ReviewDataService', 'KanjiDataService'];
+    ReviewService.$inject = ['$state', 'ReviewDataService', 'KanjiDataService', 'KanjiStatisticsDataService'];
 
-    function ReviewService($state, ReviewDataService, KanjiDataService){
+    function ReviewService($state, ReviewDataService, KanjiDataService, KanjiStatisticsDataService){
 
         var nReviewedKanji = 0;
         var nCorrectWritings = 0;
@@ -38,12 +38,14 @@
 
         return oService;
 
-        // PUBLIC //////////////////////////////////////////////////////////////
+        // PUBLIC //
 
         /**
          * Goes to the results screen.
          */
         function endReview(){
+            oService.oReviewEngine.endReview();
+
             $state.go('app.results');
         }
 
@@ -100,10 +102,10 @@
          * @param nLearnedKanji The number of learned kanjis.
          */
         function init(nLearnedKanji){
-            var oReviewDataPersistence = new ReviewDataPersistence(ReviewDataService);
-            var oReviewData = new ReviewData(oReviewDataPersistence);
+            var oReviewData = new ReviewData({reviewDataPersistence: ReviewDataService});
             var oKanjiCollection = new KanjiCollection();
             oKanjiCollection.populateFromJsonObject(KanjiDataService.getKanjiData());
+
             var oHardStorage = new KanjiDifficultyStorage({
                 store: oReviewData.getHardStorage(),
                 cycle: oReviewData.getHardCycle()
@@ -116,19 +118,29 @@
                 store: oReviewData.getEasyStorage(),
                 cycle: oReviewData.getEasyCycle()
             });
+            var oKanjiStatisticsCollection = new KanjiStatisticsCollection({
+                kanjiStatisticsDataPersistence: KanjiStatisticsDataService
+            });
+
             var oKanjiDifficultyManager = new KanjiDifficultyManager({
                 hardStorage: oHardStorage,
                 mediumStorage: oMediumStorage,
-                easyStorage: oEasyStorage
+                easyStorage: oEasyStorage,
+                kanjiStatisticsCollection: oKanjiStatisticsCollection
             });
-            var oReviewBatch = new ReviewBatch(nLearnedKanji, nLearnedKanji, {
+
+            oKanjiDifficultyManager.storeNewLearnedKanji(oReviewData.getLearnedKanji(), nLearnedKanji);
+            oReviewData.setLearnedKanji(nLearnedKanji);
+
+            var oReviewBatch = new ReviewBatch({
                 kanjiDifficultyManager: oKanjiDifficultyManager
             });
 
             oService.oReviewEngine = new ReviewEngine({
                 reviewData: oReviewData,
                 kanjiCollection: oKanjiCollection,
-                reviewBatch: oReviewBatch
+                reviewBatch: oReviewBatch,
+                kanjiDifficultyManager: oKanjiDifficultyManager
             });
         }
 
@@ -148,20 +160,33 @@
             $state.go('app.drawing');
         }
 
+        /**
+         * Increments the correct writings counter, adds the result to the statistics and goes to the next kanji.
+         */
         function successfulWriting(){
             nCorrectWritings++;
 
+            oService.oReviewEngine.addResult(oService.oCurrentKanji.getId(), 1);
+
             goToNextKanji();
         }
 
+        /**
+         * Increments the wrong writings counter, adds the result to the statistics and goes to the next kanji.
+         */
         function wrongWriting(){
             nWrongWritings++;
 
+            oService.oReviewEngine.addResult(oService.oCurrentKanji.getId(), 0);
+
             goToNextKanji();
         }
 
-        // PRIVATE /////////////////////////////////////////////////////////////
+        // PRIVATE //
 
+        /**
+         * Obtains the next kanji from the review engine and increments the reviewed kanji counter.
+         */
         function goToNextKanji(){
             oService.oCurrentKanji = oService.oReviewEngine.getNextKanji();
 
