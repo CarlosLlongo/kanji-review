@@ -1,76 +1,75 @@
 describe('ReviewBatch', function(){
 
     it('can create a ReviewBatch object', function(){
-        expect(new ReviewBatch(0, 0)).toBeDefined();
+        expect(new ReviewBatch()).toBeDefined();
     });
 
     it("can create ReviewBatch with size", function () {
-        var oKanjiDifficultyManager = new KanjiDifficultyManager({
-            hardStorage: new KanjiDifficultyStorage(),
-            mediumStorage: new KanjiDifficultyStorage(),
-            easyStorage: new KanjiDifficultyStorage()
-        });
+        var oKanjiDifficultyManagerMock = mockObject(new KanjiDifficultyManager());
+        createStub(oKanjiDifficultyManagerMock, 'getFromHardCycle', []);
+        createStub(oKanjiDifficultyManagerMock, 'getFromMediumCycle', []);
+        createStub(oKanjiDifficultyManagerMock, 'getFromEasyCycle', []);
 
-        var oReviewBatch = new ReviewBatch(0, 0, {kanjiDifficultyManager: oKanjiDifficultyManager});
+        var oReviewBatch = new ReviewBatch({kanjiDifficultyManager: oKanjiDifficultyManagerMock});
+
         oReviewBatch.populate();
         expect(oReviewBatch.getSize()).toEqual(0);
 
-        oKanjiDifficultyManager.addAllToHard([1]);
-        oReviewBatch = new ReviewBatch(1, 0, {kanjiDifficultyManager: oKanjiDifficultyManager});
+        createStub(oKanjiDifficultyManagerMock, 'getFromHardCycle', [1]);
+
+        oReviewBatch = new ReviewBatch({kanjiDifficultyManager: oKanjiDifficultyManagerMock});
         oReviewBatch.populate();
         expect(oReviewBatch.getSize()).toEqual(1);
 
-        oKanjiDifficultyManager.addAllToHard(fillArray(2,52));
-        oReviewBatch = new ReviewBatch(53, 0, {kanjiDifficultyManager: oKanjiDifficultyManager});
+        createStub(oKanjiDifficultyManagerMock, 'getFromHardCycle', fillArray(1,53));
+        oReviewBatch = new ReviewBatch({kanjiDifficultyManager: oKanjiDifficultyManagerMock});
         oReviewBatch.populate();
         expect(oReviewBatch.getSize()).toEqual(53);
 
-        oKanjiDifficultyManager.addAllToHard(fillArray(54, 1510));
-        oReviewBatch = new ReviewBatch(1564, 0, {kanjiDifficultyManager: oKanjiDifficultyManager});
+        createStub(oKanjiDifficultyManagerMock, 'getFromHardCycle', fillArray(1, 100));
+        oReviewBatch = new ReviewBatch({kanjiDifficultyManager: oKanjiDifficultyManagerMock});
         oReviewBatch.populate();
         expect(oReviewBatch.getSize()).toEqual(100);
     });
 
     it("can get remaining kanji to fill batch", function () {
-        var oKanjiDifficultyManager = new KanjiDifficultyManager({
-            hardStorage: new KanjiDifficultyStorage(),
-            mediumStorage: new KanjiDifficultyStorage(),
-            easyStorage: new KanjiDifficultyStorage()
-        });
+        var oKanjiDifficultyManagerMock = mockObject(new KanjiDifficultyManager());
+        createStub(oKanjiDifficultyManagerMock, 'getFromHardCycle', []);
+        createStub(oKanjiDifficultyManagerMock, 'getFromMediumCycle', []);
+        createStub(oKanjiDifficultyManagerMock, 'getFromEasyCycle', []);
 
-        var oReviewBatch = new ReviewBatch(0, 0, {kanjiDifficultyManager: oKanjiDifficultyManager});
+        var oReviewBatch = new ReviewBatch({kanjiDifficultyManager: oKanjiDifficultyManagerMock});
         oReviewBatch.populate();
         expect(oReviewBatch.remaining()).toBe(100);
 
-        oKanjiDifficultyManager.addAllToHard(fillArray(1,53));
-        oReviewBatch = new ReviewBatch(53, 0, {kanjiDifficultyManager: oKanjiDifficultyManager});
+        createStub(oKanjiDifficultyManagerMock, 'getFromHardCycle', fillArray(1,53));
+        oReviewBatch = new ReviewBatch({kanjiDifficultyManager: oKanjiDifficultyManagerMock});
         oReviewBatch.populate();
         expect(oReviewBatch.remaining()).toBe(47);
 
-        oKanjiDifficultyManager.addAllToHard(fillArray(54, 1510));
-        oReviewBatch = new ReviewBatch(1564, 0, {kanjiDifficultyManager: oKanjiDifficultyManager});
+        createStub(oKanjiDifficultyManagerMock, 'getFromHardCycle', fillArray(1,100));
+        oReviewBatch = new ReviewBatch({kanjiDifficultyManager: oKanjiDifficultyManagerMock});
         oReviewBatch.populate();
         expect(oReviewBatch.remaining()).toBe(0);
     });
 
     it("can get the review batch and elements are unique", function () {
-        var oKanjiDifficultyManager = new KanjiDifficultyManager({
-            hardStorage: new KanjiDifficultyStorage(),
-            mediumStorage: new KanjiDifficultyStorage(),
-            easyStorage: new KanjiDifficultyStorage()
-        });
+        var oKanjiDifficultyManagerMock = mockObject(new KanjiDifficultyManager());
+        createStub(oKanjiDifficultyManagerMock, 'getFromHardCycle', []);
+        createStub(oKanjiDifficultyManagerMock, 'getFromMediumCycle', []);
+        createStub(oKanjiDifficultyManagerMock, 'getFromEasyCycle', []);
 
-        var oReviewBatch = new ReviewBatch(0, 0, {kanjiDifficultyManager: oKanjiDifficultyManager});
+        var oReviewBatch = new ReviewBatch({kanjiDifficultyManager: oKanjiDifficultyManagerMock});
         oReviewBatch.populate();
         expect(oReviewBatch.getBatch()).toEqual([]);
 
-        oKanjiDifficultyManager.addHard(1);
-        oReviewBatch = new ReviewBatch(1, 0, {kanjiDifficultyManager: oKanjiDifficultyManager});
+        createStub(oKanjiDifficultyManagerMock, 'getFromHardCycle', [1]);
+        oReviewBatch = new ReviewBatch({kanjiDifficultyManager: oKanjiDifficultyManagerMock});
         oReviewBatch.populate();
         expect(oReviewBatch.getBatch()).toEqual([1]);
 
-        oKanjiDifficultyManager.addAllToHard(fillArray(2, 1363));
-        oReviewBatch = new ReviewBatch(1364, 0, {kanjiDifficultyManager: oKanjiDifficultyManager});
+        createStub(oKanjiDifficultyManagerMock, 'getFromHardCycle', generateRandomArray(1, 1363, 100));
+        oReviewBatch = new ReviewBatch({kanjiDifficultyManager: oKanjiDifficultyManagerMock});
         oReviewBatch.populate();
 
         var aBatch = oReviewBatch.getBatch();
@@ -87,14 +86,12 @@ describe('ReviewBatch', function(){
     });
 
     it("when learned are less than 100, review batch contains all learned", function () {
-        var oKanjiDifficultyManager = new KanjiDifficultyManager({
-            hardStorage: new KanjiDifficultyStorage(),
-            mediumStorage: new KanjiDifficultyStorage(),
-            easyStorage: new KanjiDifficultyStorage()
-        });
+        var oKanjiDifficultyManagerMock = mockObject(new KanjiDifficultyManager());
+        createStub(oKanjiDifficultyManagerMock, 'getFromHardCycle', fillArray(1, 68));
+        createStub(oKanjiDifficultyManagerMock, 'getFromMediumCycle', []);
+        createStub(oKanjiDifficultyManagerMock, 'getFromEasyCycle', []);
 
-        oKanjiDifficultyManager.addAllToHard(fillArray(1, 68));
-        var oReviewBatch = new ReviewBatch(68, 0, {kanjiDifficultyManager: oKanjiDifficultyManager});
+        var oReviewBatch = new ReviewBatch({kanjiDifficultyManager: oKanjiDifficultyManagerMock});
         oReviewBatch.populate();
 
         var aBatch = oReviewBatch.getBatch();
@@ -104,73 +101,13 @@ describe('ReviewBatch', function(){
         }
     });
 
-    it("when new learned kanji >= 100, batch are all new kanji", function () {
-        var oKanjiDifficultyManager = new KanjiDifficultyManager({
-            hardStorage: new KanjiDifficultyStorage(),
-            mediumStorage: new KanjiDifficultyStorage(),
-            easyStorage: new KanjiDifficultyStorage()
-        });
-
-        oKanjiDifficultyManager.addAllToHard(fillArray(1, 100));
-        var oReviewBatch = new ReviewBatch(100, 100, {kanjiDifficultyManager: oKanjiDifficultyManager});
-        oReviewBatch.populate();
-
-        var aBatch = oReviewBatch.getBatch();
-
-        for(var i = 1; i <= 100; i++){
-            expect(aBatch.indexOf(i)).not.toEqual(-1);
-        }
-
-        oReviewBatch = new ReviewBatch(350, 100, {kanjiDifficultyManager: oKanjiDifficultyManager});
-        oReviewBatch.populate();
-
-        aBatch = oReviewBatch.getBatch();
-
-        expect(aBatch.length).toEqual(100);
-
-        for(i = 251; i <= 350; i++){
-            expect(aBatch.indexOf(i)).not.toEqual(-1);
-        }
-
-        oReviewBatch = new ReviewBatch(350, 130, {kanjiDifficultyManager: oKanjiDifficultyManager});
-        oReviewBatch.populate();
-
-        aBatch = oReviewBatch.getBatch();
-
-        expect(aBatch.length).toEqual(100);
-
-        for(i = 0; i < aBatch.length; i++){
-            expect(parseInt(aBatch[i])).toBeLessThan(351);
-            expect(parseInt(aBatch[i])).toBeGreaterThan(220);
-        }
-    });
-
-    it("when new learned kanji < 100, all are added", function () {
-        var oKanjiDifficultyManager = new KanjiDifficultyManager({
-            hardStorage: new KanjiDifficultyStorage(),
-            mediumStorage: new KanjiDifficultyStorage(),
-            easyStorage: new KanjiDifficultyStorage()
-        });
-
-        var oReviewBatch = new ReviewBatch(230, 10, {kanjiDifficultyManager: oKanjiDifficultyManager});
-        oReviewBatch.populate();
-
-        var aBatch = oReviewBatch.getBatch();
-
-        for(var i = 230; i > 220; i--){
-            expect(aBatch.indexOf(i)).not.toEqual(-1);
-        }
-    });
-
     it("when hard kanji > 0 and > than remaining space, batch if filled with hard kanji", function () {
-        var oKanjiDifficultyManager = new KanjiDifficultyManager({
-            hardStorage: new KanjiDifficultyStorage(),
-            mediumStorage: new KanjiDifficultyStorage(),
-            easyStorage: new KanjiDifficultyStorage()
-        });
+        var oKanjiDifficultyManagerMock = mockObject(new KanjiDifficultyManager());
+        createStub(oKanjiDifficultyManagerMock, 'getFromHardCycle', generateRandomArray(30, 150, 100));
+        createStub(oKanjiDifficultyManagerMock, 'getFromMediumCycle', []);
+        createStub(oKanjiDifficultyManagerMock, 'getFromEasyCycle', []);
 
-        oKanjiDifficultyManager.addAllToHard(fillArray(30, 120));
-        var oReviewBatch = new ReviewBatch(145, 20, {kanjiDifficultyManager: oKanjiDifficultyManager});
+        var oReviewBatch = new ReviewBatch({kanjiDifficultyManager: oKanjiDifficultyManagerMock});
         oReviewBatch.populate();
 
         var aBatch = oReviewBatch.getBatch();
@@ -178,18 +115,17 @@ describe('ReviewBatch', function(){
     });
 
     it("each review batch is different", function () {
-        var oKanjiDifficultyManager = new KanjiDifficultyManager({
-            hardStorage: new KanjiDifficultyStorage(),
-            mediumStorage: new KanjiDifficultyStorage(),
-            easyStorage: new KanjiDifficultyStorage()
-        });
-        oKanjiDifficultyManager.addAllToHard(fillArray(1, 1000));
+        var oKanjiDifficultyManagerMock = mockObject(new KanjiDifficultyManager());
+        createStub(oKanjiDifficultyManagerMock, 'getFromHardCycle', generateRandomArray(1, 1000, 100));
+        createStub(oKanjiDifficultyManagerMock, 'getFromMediumCycle', []);
+        createStub(oKanjiDifficultyManagerMock, 'getFromEasyCycle', []);
 
-        var oReviewBatch = new ReviewBatch(1000, 0, {kanjiDifficultyManager: oKanjiDifficultyManager});
+        var oReviewBatch = new ReviewBatch({kanjiDifficultyManager: oKanjiDifficultyManagerMock});
         oReviewBatch.populate();
         var aBatch = oReviewBatch.getBatch();
 
-        var oAnotherReviewBatch = new ReviewBatch(1000, 0, {kanjiDifficultyManager: oKanjiDifficultyManager});
+        createStub(oKanjiDifficultyManagerMock, 'getFromHardCycle', generateRandomArray(1, 1000, 100));
+        var oAnotherReviewBatch = new ReviewBatch({kanjiDifficultyManager: oKanjiDifficultyManagerMock});
         oAnotherReviewBatch.populate();
         var aAnotherBatch = oAnotherReviewBatch.getBatch();
 
@@ -197,29 +133,19 @@ describe('ReviewBatch', function(){
     });
 
     it("after new and hard are added, half are medium and half are easy", function () {
-        var oKanjiDifficultyManager = new KanjiDifficultyManager({
-            hardStorage: new KanjiDifficultyStorage(),
-            mediumStorage: new KanjiDifficultyStorage(),
-            easyStorage: new KanjiDifficultyStorage()
-        });
+        var oKanjiDifficultyManagerMock = mockObject(new KanjiDifficultyManager());
+        createStub(oKanjiDifficultyManagerMock, 'getFromHardCycle', generateRandomArray(1, 10, 10));
+        createStub(oKanjiDifficultyManagerMock, 'getFromMediumCycle', generateRandomArray(100, 199, 45));
+        createStub(oKanjiDifficultyManagerMock, 'getFromEasyCycle', generateRandomArray(200, 299, 45));
 
-        oKanjiDifficultyManager.addAllToHard(fillArray(1, 10));
-        oKanjiDifficultyManager.addAllToMedium(fillArray(100, 100));
-        oKanjiDifficultyManager.addAllToEasy(fillArray(200, 100));
-
-        var oReviewBatch = new ReviewBatch(310, 10, {kanjiDifficultyManager: oKanjiDifficultyManager});
+        var oReviewBatch = new ReviewBatch({kanjiDifficultyManager: oKanjiDifficultyManagerMock});
         oReviewBatch.populate();
         var aBatch = oReviewBatch.getBatch();
 
         expect(aBatch.length).toBe(100);
 
-        // Expect to find the new learned kanji
-        for(var i = 310; i > 300; i--){
-            expect(aBatch.indexOf(i)).not.toEqual(-1);
-        }
-
         // Expect to find the hard kanji
-        for(i = 1; i <= 10 ; i++){
+        for(var i = 1; i <= 10 ; i++){
             expect(aBatch.indexOf(i)).not.toEqual(-1);
         }
 
@@ -237,25 +163,17 @@ describe('ReviewBatch', function(){
             }
         }
 
-        expect(nMediumDifficultyKanji).toBe(40);
-        expect(nEasyDifficultyKanji).toBe(40);
+        expect(nMediumDifficultyKanji).toBe(45);
+        expect(nEasyDifficultyKanji).toBe(45);
     });
 
     it("can re-populate the batch", function () {
-        var oHardStorage = mockObject(new KanjiDifficultyStorage());
-        var oMediumStorage = mockObject(new KanjiDifficultyStorage());
-        var oEasyStorage = mockObject(new KanjiDifficultyStorage());
-        createStub(oHardStorage, 'getFromCycle', []);
-        createStub(oMediumStorage, 'getFromCycle', []);
-        createStub(oEasyStorage, 'getFromCycle', []);
+        var oKanjiDifficultyManagerMock = mockObject(new KanjiDifficultyManager());
+        createStub(oKanjiDifficultyManagerMock, 'getFromHardCycle', generateRandomArray(1, 30, 30));
+        createStub(oKanjiDifficultyManagerMock, 'getFromMediumCycle', generateRandomArray(40, 300, 70));
+        createStub(oKanjiDifficultyManagerMock, 'getFromEasyCycle', []);
 
-        var oKanjiDifficultyManager = new KanjiDifficultyManager({
-            hardStorage: oHardStorage,
-            mediumStorage: oMediumStorage,
-            easyStorage: oEasyStorage
-        });
-
-        var oReviewBatch = new ReviewBatch(10, 10, {kanjiDifficultyManager: oKanjiDifficultyManager});
+        var oReviewBatch = new ReviewBatch({kanjiDifficultyManager: oKanjiDifficultyManagerMock});
         oReviewBatch.populate();
         var aBatch = oReviewBatch.getBatch().slice();
 
