@@ -85,19 +85,25 @@ describe('KanjiStatisticsCollection', function(){
             '33': [0, 1, 0]
         });
 
-        var oKanjiStatisticsCollection = new KanjiStatisticsCollection(oKanjiStatisticsDataPersistenceMock);
-
-        oKanjiStatisticsCollection.loadFromLocalStorage();
+        var oKanjiStatisticsCollection = new KanjiStatisticsCollection({
+            kanjiStatisticsDataPersistence: oKanjiStatisticsDataPersistenceMock
+        });
 
         expect(oKanjiStatisticsCollection.getKanjiStatistics('1').getResults()).toEqual([1, 0]);
         expect(oKanjiStatisticsCollection.getKanjiStatistics('33').getResults()).toEqual([0, 1, 0]);
     });
 
     it("can save to local storage", function () {
-        var oKanjiStatisticsDataPersistenceMock = mockObject({saveKanjiStatisticsData: function(){}});
+        var oKanjiStatisticsDataPersistenceMock = mockObject({
+            saveKanjiStatisticsData: function(){},
+            getKanjiStatisticsData: function(){}
+        });
+        createStub(oKanjiStatisticsDataPersistenceMock, 'getKanjiStatisticsData', {});
         spyFunction(oKanjiStatisticsDataPersistenceMock, 'saveKanjiStatisticsData');
 
-        var oKanjiStatisticsCollection = new KanjiStatisticsCollection(oKanjiStatisticsDataPersistenceMock);
+        var oKanjiStatisticsCollection = new KanjiStatisticsCollection({
+            kanjiStatisticsDataPersistence: oKanjiStatisticsDataPersistenceMock
+        });
         oKanjiStatisticsCollection.addKanjiStatistics(new KanjiStatistics('3', [1,0,0]));
         oKanjiStatisticsCollection.addKanjiStatistics(new KanjiStatistics('9', [1,1,1]));
 
