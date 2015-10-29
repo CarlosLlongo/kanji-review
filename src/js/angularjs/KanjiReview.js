@@ -9,7 +9,8 @@
             'kanjireview.review',
             'kanjireview.start',
             'ionic',
-            'pw.canvas-painter'
+            'pw.canvas-painter',
+            'n3-pie-chart'
         ]);
 
     angular.module('kanjireview.drawing', []);
