@@ -141,12 +141,12 @@ function KanjiDifficultyStorage(oOptions){
      */
     function initOptions(oOptions){
         if(oOptions instanceof Object){
-            if(oOptions.storage){
-                setStorage(oOptions.storage);
+            if(oOptions.store){
+                setStorage(oOptions.store.slice());
             }
 
             if(oOptions.cycle){
-                setCurrentCycle(oOptions.cycle);
+                setCurrentCycle(oOptions.cycle.slice());
             }
         }
     }
