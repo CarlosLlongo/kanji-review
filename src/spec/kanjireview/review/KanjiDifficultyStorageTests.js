@@ -6,7 +6,7 @@ describe('KanjiDifficultyStorage', function() {
 
     it("can init storage and cycle by parameters", function () {
         var oKanjiDifficultyStorage = new KanjiDifficultyStorage({
-            storage: [2],
+            store: [2],
             cycle: [3]
         });
 
