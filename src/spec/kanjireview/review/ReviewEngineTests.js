@@ -137,18 +137,4 @@ describe('ReviewEngine', function(){
         expect(wasCalled(oKanjiDifficultyManagerMock, 'updateReviewData')).toBe(true);
         expect(wasCalled(oReviewDataMock, 'saveReviewData')).toBe(true);
     });
-
-    it("can save statistics", function () {
-        var oReviewBatchMock = mockObject(new ReviewBatch());
-        var oKanjiDifficultyManagerMock = mockObject(new KanjiDifficultyManager());
-        spyFunction(oKanjiDifficultyManagerMock, 'clearStatistics');
-
-        var oReviewEngine = new ReviewEngine({
-            reviewBatch: oReviewBatchMock,
-            kanjiDifficultyManager: oKanjiDifficultyManagerMock
-        });
-
-        oReviewEngine.clearStatistics();
-        expect(wasCalled(oKanjiDifficultyManagerMock, 'clearStatistics')).toBe(true);
-    });
 });
