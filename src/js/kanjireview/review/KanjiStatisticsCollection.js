@@ -3,7 +3,7 @@
  * @param oKanjiStatisticsDataPersistence The persistence object tasked with saving the kanji statistics.
  * @constructor
  */
-function KanjiStatisticsCollection(oKanjiStatisticsDataPersistence){
+function KanjiStatisticsCollection(oOptions){
 
     var oKanjiStatisticsCollection = this;
 
@@ -15,7 +15,7 @@ function KanjiStatisticsCollection(oKanjiStatisticsDataPersistence){
     /**
      * The persistence class.
      */
-    oKanjiStatisticsCollection.oKanjiStatisticsDataPersistence = oKanjiStatisticsDataPersistence;
+    oKanjiStatisticsCollection.oKanjiStatisticsDataPersistence = null;
 
     oKanjiStatisticsCollection.addKanjiStatistics = addKanjiStatistics;
     oKanjiStatisticsCollection.getKanjiStatistics = getKanjiStatistics;
@@ -24,6 +24,10 @@ function KanjiStatisticsCollection(oKanjiStatisticsDataPersistence){
     oKanjiStatisticsCollection.loadFromLocalStorage = loadFromLocalStorage;
     oKanjiStatisticsCollection.saveToLocalStorage = saveToLocalStorage;
     oKanjiStatisticsCollection.hasStatistics = hasStatistics;
+
+    initOptions(oOptions);
+
+    // PUBLIC //
 
     /**
      * Adds a KanjiStatistics to the collection.
@@ -87,7 +91,7 @@ function KanjiStatisticsCollection(oKanjiStatisticsDataPersistence){
      * Loads the statistics from local storage.
      */
     function loadFromLocalStorage(){
-        var oJsonObject = oKanjiStatisticsDataPersistence.getKanjiStatisticsData();
+        var oJsonObject = oKanjiStatisticsCollection.oKanjiStatisticsDataPersistence.getKanjiStatisticsData();
         populateFromJsonObject(oJsonObject);
     }
 
@@ -96,10 +100,12 @@ function KanjiStatisticsCollection(oKanjiStatisticsDataPersistence){
      */
     function saveToLocalStorage(){
         var oJsonObject = {};
+
         for(var sKey in oKanjiStatisticsCollection.oCollection){
             oJsonObject[sKey] = oKanjiStatisticsCollection.oCollection[sKey].toJsonObject();
         }
-        oKanjiStatisticsDataPersistence.saveKanjiStatisticsData(oJsonObject);
+
+        oKanjiStatisticsCollection.oKanjiStatisticsDataPersistence.saveKanjiStatisticsData(oJsonObject);
     }
 
     /**
@@ -109,6 +115,23 @@ function KanjiStatisticsCollection(oKanjiStatisticsDataPersistence){
      */
     function hasStatistics(sId){
         return sId in oKanjiStatisticsCollection.oCollection;
+    }
+
+    // PRIVATE //
+
+    /**
+     * Gets the elements in the Option object and assigns them to object properties so then can be used in the class
+     * methods.
+     * @param oOptions The object containing the class dependencies.
+     */
+    function initOptions(oOptions){
+        if(oOptions instanceof Object){
+            if(oOptions.kanjiStatisticsDataPersistence){
+                oKanjiStatisticsCollection.oKanjiStatisticsDataPersistence = oOptions.kanjiStatisticsDataPersistence;
+
+                loadFromLocalStorage();
+            }
+        }
     }
 
 }
