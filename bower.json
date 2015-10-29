@@ -6,6 +6,7 @@
     "angular-mocks": "~1.4.3"
   },
   "dependencies": {
-    "drawingboard.js": "~0.4.4"
+    "drawingboard.js": "~0.4.4",
+    "n3-charts.pie-chart": "~1.0.0"
   }
 }
