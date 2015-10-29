@@ -310,19 +310,6 @@ describe('KanjiDifficultyManager', function(){
         wasCalled(oKanjiStatisticsCollectionMock, 'saveToLocalStorage');
     });
 
-    it("can clear kanji statistics", function () {
-        var oKanjiStatisticsCollectionMock = mockObject(new KanjiStatisticsCollection());
-        spyFunction(oKanjiStatisticsCollectionMock, 'clearStatistics');
-        var oKanjiDifficultyManager = new KanjiDifficultyManager(
-            {
-                kanjiStatisticsCollection: oKanjiStatisticsCollectionMock
-            }
-        );
-
-        oKanjiDifficultyManager.saveStatistics();
-        wasCalled(oKanjiStatisticsCollectionMock, 'clearStatistics');
-    });
-
     it("can update review data", function () {
         var oHardStorageMock = mockObject(new KanjiDifficultyStorage());
         createStub(oHardStorageMock, 'getStorage', ['1', '2', '3']);
@@ -362,5 +349,22 @@ describe('KanjiDifficultyManager', function(){
         expect(wasCalledParameter(oReviewDataMock, 'setMediumCycle', 1)).toEqual(['4', '6']);
         expect(wasCalled(oReviewDataMock, 'setEasyCycle')).toBe(true);
         expect(wasCalledParameter(oReviewDataMock, 'setEasyCycle', 1)).toEqual(['7']);
+    });
+
+    it("can store new learned kanjis", function () {
+        var oHardStorageMock = mockObject(new KanjiDifficultyStorage());
+        spyFunction(oHardStorageMock, 'storeAll');
+        var oKanjiDifficultyManager = new KanjiDifficultyManager(
+            {
+                hardStorage: oHardStorageMock
+            }
+        );
+
+        oKanjiDifficultyManager.storeNewLearnedKanji(25, 30);
+        expect(wasCalled(oHardStorageMock, 'storeAll')).toBe(true);
+        expect(wasCalledParameter(oHardStorageMock, 'storeAll', 1)).toEqual(['30','29','28','27','26']);
+
+        oKanjiDifficultyManager.storeNewLearnedKanji(40, 40);
+        expect(wasCalledParameter(oHardStorageMock, 'storeAll', 1)).toEqual([]);
     });
 });
