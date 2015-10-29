@@ -1,0 +1,23 @@
+<ion-view view-title="Results" ng-controller="ResultsController as vm">
+    <ion-header-bar class="bar-light">
+        <h1 class="title">Results</h1>
+    </ion-header-bar>
+    <ion-content>
+        <ul class="list">
+            <li class="item">
+                Total kanji reviewed: {{vm.getReviewedKanji()}}
+            </li>
+            <li class="item">
+                Correct kanji reviewed: {{vm.getCorrectCount()}}
+            </li>
+            <li class="item">
+                Wrong kanji reviewed: {{vm.getWrongCount()}}
+            </li>
+        </ul>
+        <div class="row">
+            <button class="button button-block button-positive" ui-sref="app.start">
+                Continue
+            </button>
+        </div>
+    </ion-content>
+</ion-view>

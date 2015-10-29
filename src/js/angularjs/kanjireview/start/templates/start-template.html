@@ -1,0 +1,23 @@
+<section ng-controller="StartController as vm">
+    <div class="row">
+        <div class="col">
+            <div class="list">
+                <label class="item item-input item-stacked-label">
+                    <span class="input-label">Último kanji aprendido:</span>
+                    <input type="number" placeholder="123" ng-model="vm.nLearnedKanji">
+                </label>
+            </div>
+            <button class="button button-block button-positive"
+                    ng-disabled="!vm.bReadyToStart"
+                    ng-click="vm.startReview()">
+                Start
+            </button>
+        </div>
+    </div>
+    <div class="bar bar-footer">
+        <button class="button icon-left ion-alert-circled button-outline button-assertive"
+                ng-click="vm.clearData()">
+            Clear all data
+        </button>
+    </div>
+</section>
