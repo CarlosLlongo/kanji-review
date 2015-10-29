@@ -46,7 +46,6 @@ function ReviewEngine(oOptions){
     oReviewEngine.getNextKanji = getNextKanji;
     oReviewEngine.addResult = addResult;
     oReviewEngine.endReview = endReview;
-    oReviewEngine.clearStatistics = clearStatistics;
 
     initOptions(oOptions);
     populateBatch();
@@ -105,13 +104,6 @@ function ReviewEngine(oOptions){
         oReviewEngine.oKanjiDifficultyManager.saveStatistics();
         oReviewEngine.oKanjiDifficultyManager.updateReviewData(oReviewEngine.oReviewData);
         oReviewEngine.oReviewData.saveReviewData();
-    }
-
-    /**
-     * Instructs the Kanji Difficulty manager to clear the Kanji Statistics.
-     */
-    function clearStatistics(){
-        oReviewEngine.oKanjiDifficultyManager.clearStatistics();
     }
 
     // PRIVATE //
