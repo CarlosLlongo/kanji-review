@@ -98,7 +98,7 @@ describe('ArrayUtils', function(){
 
         var oVariations = {};
         var sKey;
-        var nIterations = 1000;
+        var nIterations = 5000;
 
         for(var i = 0; i < nIterations; i++){
             aOriginal = [1, 2, 3, 4];
@@ -121,7 +121,7 @@ describe('ArrayUtils', function(){
         expect(Object.keys(oVariations).length).toEqual(nPermutations);
 
         var nOptimalVariation = nIterations / nPermutations;
-        var nVariationError = nOptimalVariation * 0.05;
+        var nVariationError = nOptimalVariation * 0.1;
         var nLowerVariation = nOptimalVariation - nVariationError;
         var nUpperVariation = nOptimalVariation + nVariationError;
 
