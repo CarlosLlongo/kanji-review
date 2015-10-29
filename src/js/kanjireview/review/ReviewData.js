@@ -151,7 +151,7 @@ function ReviewData(oOptions){
      * @returns {number} The number of learned kanji.
      */
     function getLearnedKanji(){
-        return oReviewData.oData.learnedKanji || [];
+        return oReviewData.oData.learnedKanji || 0;
     }
 
     /**
