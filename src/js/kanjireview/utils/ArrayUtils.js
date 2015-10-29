@@ -57,6 +57,30 @@ function fillArray(nStartValue, nNumberOfValues){
 }
 
 /**
+ * Creates an array filled with numbers between the min range and max range, both included, and this a max length
+ * of ArrayLength. If the array length demanded is greater than the number of values, all values are returned.
+ * @param nMinRange The minimum value that can be added to the array.
+ * @param nMaxRange The maximum value that can be added to the array.
+ * @param nArrayLength The maximum length of the generated array.
+ * @returns {Array} An array with random values between the range specified.
+ */
+function generateRandomArray(nMinRange, nMaxRange, nArrayLength){
+    var aNumbers = fillArray(nMinRange, nMaxRange - nMinRange + 1);
+
+    if(nArrayLength < aNumbers.length){
+        var aRandomArray = [];
+
+        for(var i = 0; i < nArrayLength; i++){
+            aRandomArray.push(getAndRemoveRandomValue(aNumbers));
+        }
+
+        return aRandomArray;
+    }
+
+    return shuffle(aNumbers);
+}
+
+/**
  * Gets a random value from the array, removes it from the array and returns it.
  * @param aOriginal The array from where to obtain the value. This array will be modified.
  * @returns {mixed} One of the values in the array.
