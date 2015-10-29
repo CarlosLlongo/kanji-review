@@ -48,11 +48,22 @@
             }
         };
 
+        var oStats = /*@ngInject*/ {
+            name: 'app.stats',
+            url: '/stats',
+            views: {
+                'menuContent': {
+                    templateUrl: 'html/stats/templates/stats-template.html'
+                }
+            }
+        };
+
         $stateProvider
             .state(oApp)
             .state(oStart)
             .state(oDrawing)
-            .state(oResults);
+            .state(oResults)
+            .state(oStats);
 
         $urlRouterProvider.otherwise('/app/start');
     }

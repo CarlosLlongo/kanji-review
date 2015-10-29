@@ -5,10 +5,10 @@
         .module('kanjireview.start')
         .controller('StartController', StartController);
 
-    StartController.$inject = ['$scope', 'ReviewService', 'ReviewDataService', 'KanjiDataService',
+    StartController.$inject = ['$scope', '$state', 'ReviewService', 'ReviewDataService', 'KanjiDataService',
         'KanjiStatisticsDataService', 'LocalStorage'];
 
-    function StartController($scope, ReviewService, ReviewDataService, KanjiDataService,
+    function StartController($scope, $state, ReviewService, ReviewDataService, KanjiDataService,
             KanjiStatisticsDataService, LocalStorage){
 
         var vm = this;
@@ -32,6 +32,7 @@
         vm.getLearnedKanji = getLearnedKanji;
         vm.startReview = startReview;
         vm.clearData = clearData;
+        vm.viewStats = viewStats;
 
         $scope.$on('KanjiDataService_init_end', function(){
             vm.nWaitingForServices--;
@@ -64,6 +65,13 @@
         function clearData(){
             KanjiStatisticsDataService.clearStatistics();
             ReviewDataService.clearData();
+        }
+
+        /**
+         * Goes to the statistics page.
+         */
+        function viewStats(){
+            $state.go('app.stats');
         }
 
         // PRIVATE //

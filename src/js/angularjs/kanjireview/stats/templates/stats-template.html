@@ -1,0 +1,23 @@
+<section ng-controller="StatsController as vm">
+    <div class="bar bar-header bar-light">
+        <h1 class="title">Statistics</h1>
+    </div>
+    <ion-content class="has-header has-footer">
+        <h3>Kanji Difficulty distribution</h3>
+        <div class="pie-chart-container">
+            <pie-chart data="vm.aPieChartData" options="vm.oPieChartOptions"></pie-chart>
+        </div>
+        <h4>Hard difficulty Kanjis:</h4>
+        <p><span ng-repeat="sHardKanji in vm.oKanjisPerStore.hard">{{sHardKanji}}&nbsp;</span></p>
+        <h4>Medium difficulty Kanjis:</h4>
+        <p><span ng-repeat="sMediumKanji in vm.oKanjisPerStore.medium">{{sMediumKanji}}&nbsp;</span></p>
+        <h4>Easy difficulty Kanjis:</h4>
+        <p><span ng-repeat="sEasyKanji in vm.oKanjisPerStore.easy">{{sEasyKanji}}&nbsp;</span></p>
+    </ion-content>
+    <div class="bar bar-footer">
+        <button class="button icon-left ion-arrow-left-c button-outline button-dark"
+                ng-click="vm.goBack()">
+            Back
+        </button>
+    </div>
+</section>
