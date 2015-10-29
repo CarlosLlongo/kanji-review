@@ -108,24 +108,6 @@ describe('KanjiStatisticsCollection', function(){
             .toEqual({'3': [1,0,0], '9': [1,1,1]});
     });
 
-    it("can clear statistics", function () {
-        var oKanjiStatisticsDataPersistenceMock = mockObject({saveKanjiStatisticsData: function(){}});
-        spyFunction(oKanjiStatisticsDataPersistenceMock, 'saveKanjiStatisticsData');
-
-        var oKanjiStatisticsCollection = new KanjiStatisticsCollection(oKanjiStatisticsDataPersistenceMock);
-        oKanjiStatisticsCollection.addKanjiStatistics(new KanjiStatistics('3', [1,0,0]));
-        oKanjiStatisticsCollection.addKanjiStatistics(new KanjiStatistics('9', [1,1,1]));
-
-        oKanjiStatisticsCollection.clearStatistics();
-
-        expect(oKanjiStatisticsCollection.getKanjiStatistics('3')).not.toBeDefined();
-        expect(oKanjiStatisticsCollection.getKanjiStatistics('9')).not.toBeDefined();
-
-        expect(wasCalled(oKanjiStatisticsDataPersistenceMock, 'saveKanjiStatisticsData')).toBe(true);
-        expect(wasCalledParameter(oKanjiStatisticsDataPersistenceMock, 'saveKanjiStatisticsData', 1))
-            .toEqual({});
-    });
-
     it("can check if kanji has statistics", function () {
         var oKanjiStatisticsCollection = new KanjiStatisticsCollection();
 
