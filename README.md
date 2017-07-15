@@ -9,7 +9,7 @@ KanjiReview is a mobile app to review the Kanji if you are learning them using t
 
 ## Author
 #### Carlos Llongo
-- http://www.konnichiwamundo.com
+- https://www.konnichiwamundo.com
 - https://twitter.com/xosen_
 - https://github.com/CarlosLlongo
 
